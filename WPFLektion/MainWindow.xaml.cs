@@ -24,7 +24,6 @@ namespace WPFLektion
         decimal result = 0;
         string operation = "";
         bool newNumber = true;
-        bool buttonPressed = false;
         bool equalsPressed = false;
         int ctr = 0;
 
@@ -46,9 +45,16 @@ namespace WPFLektion
 
         public void NumAppend(int btnNum)
         {
-            if (buttonPressed)
+            if (equalsPressed)
             {
+                result = 0;
+                Numbers.Clear();
+                operation = "";
                 labelCurrentOperation.Content = "";
+                txtDisplay.Text = "0";
+                ctr = 0;
+                newNumber = true;
+                equalsPressed = false;
             }
 
             // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
@@ -70,15 +76,19 @@ namespace WPFLektion
                 case "+":
                     result = result + aNumber;
                     break;
+
                 case "-":
                     result -= aNumber;
                     break;
+                
                 case "*":
                     result = result * aNumber;
                     break;
+                
                 case "/":
                     result /= aNumber;
                     break;
+                
                 default:
                     result = result + aNumber;
                     break;
@@ -98,15 +108,15 @@ namespace WPFLektion
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-            if (!buttonPressed)
+            if (!equalsPressed)
             {
                 ChangeNumber(Numbers.Last());
-                buttonPressed = true;
             }
 
             txtDisplay.Text = result.ToString();
 
             newNumber = true;
+            equalsPressed = true;
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -118,7 +128,7 @@ namespace WPFLektion
             txtDisplay.Text = "0";
             ctr = 0;
             newNumber = true;
-            buttonPressed = false;
+            equalsPressed = false;
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
@@ -172,10 +182,9 @@ namespace WPFLektion
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            //operation = "+";
-
             OperationSituation("+");
 
+            //operation = "+";
             //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
             //ChangeNumber(Numbers[ctr - 1]);
             //txtDisplay.Text = result.ToString();
@@ -201,14 +210,7 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            //if (operation == "")
-            //{
-            //    number1 = number1 * -1;
-            //}
-            //else
-            //{
-            //    number2 = number2 * -1;
-            //}
+            Numbers[Numbers.Count - 1] *= -1;
         }
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
