@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WPFLektion"
         mc:Ignorable="d"
         Title="My Calculator" Height="430" Width="280">
-    <Grid Background="#eee" Margin="0,0,-0.4,0">
+    <Border Margin="10">
+    <Grid Background="#eee">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -26,45 +27,46 @@
         </Grid.RowDefinitions>
         
         <!--Number Buttons-->
-        <Button x:Name="btn7" Grid.Row="3" Grid.Column="0" Click="btn7_Click" Margin="1.5,1.5,1.5,1.5">7</Button>
-        <Button x:Name="btn8" Grid.Row="3" Grid.Column="1" Click="btn8_Click" Margin="1.5,1.5,1.5,1.5">8</Button>
-        <Button x:Name="btn9" Grid.Row="3" Grid.Column="2" Click="btn9_Click" Margin="1.5,1.5,1.5,1.5">9</Button>
+        <Button x:Name="btn7" Grid.Row="3" Grid.Column="0" Click="btn7_Click" Margin="1.5">7</Button>
+        <Button x:Name="btn8" Grid.Row="3" Grid.Column="1" Click="btn8_Click" Margin="1.5">8</Button>
+        <Button x:Name="btn9" Grid.Row="3" Grid.Column="2" Click="btn9_Click" Margin="1.5">9</Button>
 
-        <Button x:Name="btn4" Grid.Row="4" Grid.Column="0" Click="btn4_Click" Margin="1.5,1.5,1.5,1.5">4</Button>
-        <Button x:Name="btn5" Grid.Row="4" Grid.Column="1" Click="btn5_Click" Margin="1.5,1.5,1.5,1.5">5</Button>
-        <Button x:Name="btn6" Grid.Row="4" Grid.Column="2" Click="btn6_Click" Margin="1.5,1.5,1.5,1.5">6</Button>
+        <Button x:Name="btn4" Grid.Row="4" Grid.Column="0" Click="btn4_Click" Margin="1.5">4</Button>
+        <Button x:Name="btn5" Grid.Row="4" Grid.Column="1" Click="btn5_Click" Margin="1.5">5</Button>
+        <Button x:Name="btn6" Grid.Row="4" Grid.Column="2" Click="btn6_Click" Margin="1.5">6</Button>
 
-        <Button x:Name="btn1" Grid.Row="5" Grid.Column="0" Click="btn1_Click" Margin="1.5,1.5,1.5,1.5">1</Button>
-        <Button x:Name="btn2" Grid.Row="5" Grid.Column="1" Click="btn2_Click" Margin="1.5,1.5,1.5,1.5">2</Button>
-        <Button x:Name="btn3" Grid.Row="5" Grid.Column="2" Click="btn3_Click" Margin="1.5,1.5,1.5,1.5">3</Button>
+        <Button x:Name="btn1" Grid.Row="5" Grid.Column="0" Click="btn1_Click" Margin="1.5">1</Button>
+        <Button x:Name="btn2" Grid.Row="5" Grid.Column="1" Click="btn2_Click" Margin="1.5">2</Button>
+        <Button x:Name="btn3" Grid.Row="5" Grid.Column="2" Click="btn3_Click" Margin="1.5">3</Button>
 
-        <Button x:Name="btn0" Grid.Row="6" Grid.Column="1" Click="btn0_Click" Margin="1.5,1.5,1.5,1.5">0</Button>
+        <Button x:Name="btn0" Grid.Row="6" Grid.Column="1" Click="btn0_Click" Margin="1.5">0</Button>
 
-        <Button x:Name="btnDecimal" Grid.Row="6" Grid.Column="2" Click="btnDecimal_Click" Margin="1.5,1.5,1.5,1.5">,</Button>
+        <Button x:Name="btnDecimal" Grid.Row="6" Grid.Column="2" Click="btnDecimal_Click" Margin="1.5">,</Button>
 
         <!--Math operation buttons-->
-        <Button x:Name="btnPlus" Grid.Row="2" Grid.Column="3" Click="btnPlus_Click" Margin="1.5,1.5,1.5,1.5">+</Button>
-        <Button x:Name="btnMinus" Grid.Row="3" Grid.Column="3" Click="btnMinus_Click" Margin="1.5,1.5,1.5,1.5">-</Button>
-        <Button x:Name="btnTimes" Grid.Row="4" Grid.Column="3" Click="btnTimes_Click" Margin="1.5,1.5,1.5,1.5">*</Button>
-        <Button x:Name="btnDivide" Grid.Row="5" Grid.Column="3" Click="btnDivide_Click" Margin="1.5,1.5,1.5,1.5">/</Button>
-        <Button x:Name="btnEquals" Grid.Row="6" Grid.Column="3" Click="btnEquals_Click" Margin="1.5,1.5,1.5,1.5">=</Button>
+        <Button x:Name="btnPlus" Grid.Row="2" Grid.Column="3" Click="btnPlus_Click" Margin="1.5">+</Button>
+        <Button x:Name="btnMinus" Grid.Row="3" Grid.Column="3" Click="btnMinus_Click" Margin="1.5">-</Button>
+        <Button x:Name="btnTimes" Grid.Row="4" Grid.Column="3" Click="btnTimes_Click" Margin="1.5">*</Button>
+        <Button x:Name="btnDivide" Grid.Row="5" Grid.Column="3" Click="btnDivide_Click" Margin="1.5">/</Button>
+        <Button x:Name="btnEquals" Grid.Row="6" Grid.Column="3" Click="btnEquals_Click" Margin="1.5">=</Button>
 
         <!--Positive Negative-->
-        <Button x:Name="btnPositiveNegative" Grid.Row="6" Grid.Column="0" Click="btnPositiveNegative_Click" Margin="1.5,1.5,1.5,1.5">+-</Button>
+        <Button x:Name="btnPositiveNegative" Grid.Row="6" Grid.Column="0" Click="btnPositiveNegative_Click" Margin="1.5">+-</Button>
  
         <!--Clear Buttons-->
-        <Button x:Name="btnClearEntry" Grid.Row="2" Grid.Column="0" Click="btnClearEntry_Click" Margin="1.5,1.5,1.5,1.5">CE</Button>
-        <Button x:Name="btnClear" Grid.Row="2" Grid.Column="1" Click="btnClear_Click" Margin="1.5,1.5,1.5,1.5">C</Button>
-        <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="&lt;==" Margin="1.5,1.5,1.5,1.5"/>
+        <Button x:Name="btnClearEntry" Grid.Row="2" Grid.Column="0" Click="btnClearEntry_Click" Margin="1.5">CE</Button>
+        <Button x:Name="btnClear" Grid.Row="2" Grid.Column="1" Click="btnClear_Click" Margin="1.5">C</Button>
+        <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="&lt;==" Margin="1.5"/>
 
         <!--Display Buttons-->
         <TextBox x:Name="txtDisplay" IsReadOnly="True" TextAlignment="Right" VerticalAlignment="Bottom" FontSize="30"
                  BorderThickness="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Background="#eee" Foreground="Black"
-                 TextChanged="txtDisplay_TextChanged">0</TextBox>
+                 TextChanged="txtDisplay_TextChanged" Margin="1.5">0</TextBox>
         
         <!--Result Label-->
         <Label x:Name="labelCurrentOperation" Visibility="Visible" HorizontalContentAlignment="Right" VerticalAlignment="Bottom"
                FontSize="30" BorderThickness="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Background="#eee"
-               Foreground="Yellow"></Label>
+               Foreground="Gray"></Label>
     </Grid>
+    </Border>
 </Window>

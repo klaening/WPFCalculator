@@ -20,9 +20,227 @@ namespace WPFLektion
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<decimal> Numbers = new List<decimal>();
+        decimal result = 0;
+        string operation = "";
+        bool initButtonPress = true;
+        bool buttonPressed = false;
+        int ctr = 0;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public void CreateNumber()
+        {
+            if (initButtonPress)
+            {
+                decimal number = 0;
+                Numbers.Add(number);
+                ctr++;
+                initButtonPress = false;
+            }
+        }
+
+        public void ChangeNumber(decimal aNumber)
+        {
+            switch (operation)
+            {
+                case "+":
+                    result = result + aNumber;
+                    break;
+                case "-":
+                    result -= aNumber;
+                    break;
+                case "*":
+                    result = result * aNumber;
+                    break;
+                case "/":
+                    result /= aNumber;
+                    break;
+                default:
+                    result = result + aNumber;
+                    break;
+            }
+        }
+
+        public void NumAppend(int btnNum)
+        {
+            if (buttonPressed)
+            {
+                labelCurrentOperation.Content = "";
+            }
+
+            // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
+            CreateNumber();
+
+            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+
+            decimal number = Numbers[ctr - 1];
+
+            number = number * 10 + btnNum;
+            txtDisplay.Text = number.ToString();
+            Numbers[ctr - 1] = number;
+        }
+
+        private void btn1_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(1);
+        }
+        private void btn2_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(2);
+        }
+        private void btn3_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(3);
+        }
+        private void btn4_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(4);
+        }
+        private void btn5_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(5);
+        }
+        private void btn6_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(6);
+        }
+        private void btn7_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(7);
+        }
+        private void btn8_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(8);
+        }
+        private void btn9_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(9);
+        }
+        private void btn0_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(0);
+        }
+
+
+        private void OperationSituation(string operand)
+        {
+            labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
+            ChangeNumber(Numbers.Last());
+            txtDisplay.Text = result.ToString();
+            operation = operand;
+            initButtonPress = true;
+        }
+
+        private void btnDecimal_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnPlus_Click(object sender, RoutedEventArgs e)
+        {
+            //operation = "+";
+
+            OperationSituation("+");
+
+            //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
+            //ChangeNumber(Numbers[ctr - 1]);
+            //txtDisplay.Text = result.ToString();
+            //initButtonPress = true;
+        }
+
+        private void btnMinus_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("-");
+        }
+
+        private void btnTimes_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("*");
+        }
+
+        private void btnDivide_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("/");
+        }
+
+        private void btnEquals_Click(object sender, RoutedEventArgs e)
+        {
+            //Räknade inte med det sista talet eller sista operatorn
+            //Måste göra en sista uppdatering av talet när man trycker på likamed
+
+            if (!buttonPressed)
+            {
+                ChangeNumber(Numbers.Last());
+                buttonPressed = true;
+            }
+
+            txtDisplay.Text = result.ToString();
+
+            initButtonPress = true;
+        }
+
+        private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
+        {
+            //if (operation == "")
+            //{
+            //    number1 = number1 * -1;
+            //}
+            //else
+            //{
+            //    number2 = number2 * -1;
+            //}
+        }
+
+        private void btnClearEntry_Click(object sender, RoutedEventArgs e)
+        {
+            //if (operation == "")
+            //{
+            //    number1 = 0;
+            //}
+            //else
+            //{
+            //    number2 = 0;
+            //}
+            txtDisplay.Text = "0";
+            initButtonPress = true;
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            result = 0;
+            Numbers.Clear();
+            operation = "";
+            labelCurrentOperation.Content = "";
+            txtDisplay.Text = "0";
+            ctr = 0;
+            initButtonPress = true;
+            buttonPressed = false;
+        }
+
+        private void btnBackSpace_Click(object sender, RoutedEventArgs e)
+        {
+            List<char> IndivNumbers = new List<char>();
+            if (operation == "")
+            {
+                //IndivNumbers = number1.ToString().ToList();
+                //IndivNumbers.Remove(IndivNumbers[IndivNumbers.Count-1]);
+                //number1 = int.Parse(IndivNumbers.ToString());
+            }
+            else
+            {
+                //IndivNumbers = number2.ToString().ToList();
+                //IndivNumbers.Remove(IndivNumbers[IndivNumbers.Count-1]);
+                //number2 = int.Parse(IndivNumbers.ToString());
+            }
+        }
+
+        private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
