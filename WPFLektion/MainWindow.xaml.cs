@@ -195,14 +195,7 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            //if (operation == "")
-            //{
-            //    number1 = number1 * -1;
-            //}
-            //else
-            //{
-            //    number2 = number2 * -1;
-            //}
+
         }
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
