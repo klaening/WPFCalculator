@@ -35,6 +35,23 @@ namespace WPFLektion
             InitializeComponent();
         }
 
+        private void btnClearEntry_Click(object sender, RoutedEventArgs e)
+        {
+            string output = labelCurrentOperation.Content.ToString();
+
+            output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
+            charactersPressed -= currentNumberCharacters;
+            currentNumberCharacters = 0;
+
+            labelCurrentOperation.Content = output;
+
+            ctr--;
+            Numbers.Remove(Numbers[ctr]);
+
+            txtDisplay.Text = "0";
+            newNumber = true;
+        }
+
         public void CreateNumber()
         {
             if (newNumber)
@@ -78,7 +95,6 @@ namespace WPFLektion
             charactersPressed++;
             currentNumberCharacters++;
 
-            // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
             CreateNumber();
 
             labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
@@ -150,10 +166,9 @@ namespace WPFLektion
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            //operation = "+";
-
             OperationSituation("+");
 
+            //operation = "+";
             //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
             //ChangeNumber(Numbers[ctr - 1]);
             //txtDisplay.Text = result.ToString();
@@ -177,9 +192,6 @@ namespace WPFLektion
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-            //Räknade inte med det sista talet eller sista operatorn
-            //Måste göra en sista uppdatering av talet när man trycker på likamed
-
             if (!buttonPressed)
             {
                 ChangeNumber(Numbers.Last());
@@ -197,40 +209,40 @@ namespace WPFLektion
             {
                 string output = labelCurrentOperation.Content.ToString();
 
+                if (Numbers[ctr - 1] < 0)
+                {
+                    currentNumberCharacters++;
+                    output = output.Remove((charactersPressed - currentNumberCharacters), (currentNumberCharacters));
+                }
+                else
+                {
+
+                }
+
                 output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
 
                 if (output.Last() == '-')
                 {
                     output.Remove((output.Last() - 1), 1);
+                    //currentNumberCharacters--;
+                    //charactersPressed--;
                 }
-                else
-                {
-                    output += "-";
-                }
-
-                labelCurrentOperation.Content = output + Numbers[ctr - 1].ToString();
 
                 Numbers[ctr - 1] *= -1;
+
+                //if (Numbers[ctr - 1] < 0)
+                //{
+                //    currentNumberCharacters++;
+                //    charactersPressed++;
+                //}
+
                 txtDisplay.Text = Numbers[ctr - 1].ToString();
+
+                labelCurrentOperation.Content = output + Numbers[ctr - 1].ToString();
             }
         }
 
-        private void btnClearEntry_Click(object sender, RoutedEventArgs e)
-        {
-            string output = labelCurrentOperation.Content.ToString();
 
-            output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
-            charactersPressed -= currentNumberCharacters;
-            currentNumberCharacters = 0;
-
-            labelCurrentOperation.Content = output;
-
-            ctr--;
-            Numbers.Remove(Numbers[ctr]);
-
-            txtDisplay.Text = "0";
-            newNumber = true;
-        }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
