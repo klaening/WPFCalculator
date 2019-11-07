@@ -25,6 +25,7 @@ namespace WPFLektion
         string operation = "";
         bool newNumber = true;
         bool buttonPressed = false;
+        //För att veta vilken plats i listan jag är på
         int ctr = 0;
 
         int charactersPressed = 0;
@@ -87,10 +88,10 @@ namespace WPFLektion
 
         public void NumAppend(int btnNum)
         {
-            if (buttonPressed)
-            {
-                labelCurrentOperation.Content = "";
-            }
+            //if (buttonPressed)
+            //{
+            //    labelCurrentOperation.Content = "";
+            //}
 
             charactersPressed++;
             currentNumberCharacters++;
@@ -150,13 +151,17 @@ namespace WPFLektion
 
         private void OperationSituation(string operand)
         {
-            labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
-            ChangeNumber(Numbers.Last());
-            txtDisplay.Text = result.ToString();
-            operation = operand;
-            newNumber = true;
-            charactersPressed++;
-            currentNumberCharacters = 0;
+            if (newNumber == false)
+            {
+                labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
+                ChangeNumber(Numbers.Last());
+                txtDisplay.Text = result.ToString();
+                operation = operand;
+                newNumber = true;
+
+                charactersPressed++;
+                currentNumberCharacters = 0;
+            }
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
@@ -224,17 +229,17 @@ namespace WPFLektion
                 if (output.Last() == '-')
                 {
                     output.Remove((output.Last() - 1), 1);
-                    //currentNumberCharacters--;
-                    //charactersPressed--;
+                    currentNumberCharacters--;
+                    charactersPressed--;
                 }
 
                 Numbers[ctr - 1] *= -1;
 
-                //if (Numbers[ctr - 1] < 0)
-                //{
-                //    currentNumberCharacters++;
-                //    charactersPressed++;
-                //}
+                if (Numbers[ctr - 1] < 0)
+                {
+                    currentNumberCharacters++;
+                    charactersPressed++;
+                }
 
                 txtDisplay.Text = Numbers[ctr - 1].ToString();
 
