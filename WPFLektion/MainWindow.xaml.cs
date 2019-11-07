@@ -46,7 +46,7 @@ namespace WPFLektion
 
             labelCurrentOperation.Content = output;
 
-            ctr--;
+            //ctr--;
             Numbers.Remove(Numbers[ctr]);
 
             txtDisplay.Text = "0";
@@ -59,7 +59,7 @@ namespace WPFLektion
             {
                 decimal number = 0;
                 Numbers.Add(number);
-                ctr++;
+                //ctr++;
                 newNumber = false;
             }
         }
@@ -90,7 +90,7 @@ namespace WPFLektion
         {
             //if (buttonPressed)
             //{
-            //    labelCurrentOperation.Content = "";
+                
             //}
 
             charactersPressed++;
@@ -98,13 +98,15 @@ namespace WPFLektion
 
             CreateNumber();
 
-            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
 
-            decimal number = Numbers[ctr - 1];
+            decimal number = Numbers[ctr];
 
             number = number * 10 + btnNum;
+            Numbers[ctr] = number;
+
+            //Display
             txtDisplay.Text = number.ToString();
-            Numbers[ctr - 1] = number;
+            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
@@ -159,6 +161,7 @@ namespace WPFLektion
                 operation = operand;
                 newNumber = true;
 
+                ctr++;
                 charactersPressed++;
                 currentNumberCharacters = 0;
             }
@@ -214,7 +217,7 @@ namespace WPFLektion
             {
                 string output = labelCurrentOperation.Content.ToString();
 
-                if (Numbers[ctr - 1] < 0)
+                if (Numbers[ctr] < 0)
                 {
                     currentNumberCharacters++;
                     output = output.Remove((charactersPressed - currentNumberCharacters), (currentNumberCharacters));
@@ -233,17 +236,17 @@ namespace WPFLektion
                     charactersPressed--;
                 }
 
-                Numbers[ctr - 1] *= -1;
+                Numbers[ctr] *= -1;
 
-                if (Numbers[ctr - 1] < 0)
+                if (Numbers[ctr] < 0)
                 {
                     currentNumberCharacters++;
                     charactersPressed++;
                 }
 
-                txtDisplay.Text = Numbers[ctr - 1].ToString();
+                txtDisplay.Text = Numbers[ctr].ToString();
 
-                labelCurrentOperation.Content = output + Numbers[ctr - 1].ToString();
+                labelCurrentOperation.Content = output + Numbers[ctr].ToString();
             }
         }
 
