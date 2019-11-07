@@ -23,8 +23,8 @@ namespace WPFLektion
         List<decimal> Numbers = new List<decimal>();
         decimal result = 0;
         string operation = "";
-        bool newNumber = true;
-        bool equalsPressed = false;
+        bool initButtonPress = true;
+        bool buttonPressed = false;
         int ctr = 0;
 
         public MainWindow()
@@ -34,39 +34,13 @@ namespace WPFLektion
 
         public void CreateNumber()
         {
-            if (newNumber)
+            if (initButtonPress)
             {
                 decimal number = 0;
                 Numbers.Add(number);
                 ctr++;
-                newNumber = false;
+                initButtonPress = false;
             }
-        }
-
-        public void NumAppend(int btnNum)
-        {
-            if (equalsPressed)
-            {
-                result = 0;
-                Numbers.Clear();
-                operation = "";
-                labelCurrentOperation.Content = "";
-                txtDisplay.Text = "0";
-                ctr = 0;
-                newNumber = true;
-                equalsPressed = false;
-            }
-
-            // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
-            CreateNumber();
-
-            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
-
-            decimal visibleNumber = Numbers[ctr - 1];
-
-            visibleNumber = visibleNumber * 10 + btnNum;
-            txtDisplay.Text = visibleNumber.ToString();
-            Numbers[ctr - 1] = visibleNumber;
         }
 
         public void ChangeNumber(decimal aNumber)
@@ -76,59 +50,38 @@ namespace WPFLektion
                 case "+":
                     result = result + aNumber;
                     break;
-
                 case "-":
                     result -= aNumber;
                     break;
-                
                 case "*":
                     result = result * aNumber;
                     break;
-                
                 case "/":
                     result /= aNumber;
                     break;
-                
                 default:
                     result = result + aNumber;
                     break;
             }
         }
 
-
-
-        private void OperationSituation(string aOperation)
+        public void NumAppend(int btnNum)
         {
-            labelCurrentOperation.Content = labelCurrentOperation.Content + aOperation;
-            ChangeNumber(Numbers.Last());
-            txtDisplay.Text = result.ToString();
-            operation = aOperation;
-            newNumber = true;
-        }
-
-        private void btnEquals_Click(object sender, RoutedEventArgs e)
-        {
-            if (!equalsPressed)
+            if (buttonPressed)
             {
-                ChangeNumber(Numbers.Last());
+                labelCurrentOperation.Content = "";
             }
 
-            txtDisplay.Text = result.ToString();
+            // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
+            CreateNumber();
 
-            newNumber = true;
-            equalsPressed = true;
-        }
+            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
-        {
-            result = 0;
-            Numbers.Clear();
-            operation = "";
-            labelCurrentOperation.Content = "";
-            txtDisplay.Text = "0";
-            ctr = 0;
-            newNumber = true;
-            equalsPressed = false;
+            decimal number = Numbers[ctr - 1];
+
+            number = number * 10 + btnNum;
+            txtDisplay.Text = number.ToString();
+            Numbers[ctr - 1] = number;
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
@@ -173,7 +126,14 @@ namespace WPFLektion
         }
 
 
-
+        private void OperationSituation(string operand)
+        {
+            labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
+            ChangeNumber(Numbers.Last());
+            txtDisplay.Text = result.ToString();
+            operation = operand;
+            initButtonPress = true;
+        }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
         {
@@ -182,9 +142,10 @@ namespace WPFLektion
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
+            //operation = "+";
+
             OperationSituation("+");
 
-            //operation = "+";
             //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
             //ChangeNumber(Numbers[ctr - 1]);
             //txtDisplay.Text = result.ToString();
@@ -206,11 +167,32 @@ namespace WPFLektion
             OperationSituation("/");
         }
 
+        private void btnEquals_Click(object sender, RoutedEventArgs e)
+        {
+            //Räknade inte med det sista talet eller sista operatorn
+            //Måste göra en sista uppdatering av talet när man trycker på likamed
 
+            if (!buttonPressed)
+            {
+                ChangeNumber(Numbers.Last());
+                buttonPressed = true;
+            }
+
+            txtDisplay.Text = result.ToString();
+
+            initButtonPress = true;
+        }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            Numbers[Numbers.Count - 1] *= -1;
+            //if (operation == "")
+            //{
+            //    number1 = number1 * -1;
+            //}
+            //else
+            //{
+            //    number2 = number2 * -1;
+            //}
         }
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
@@ -224,10 +206,20 @@ namespace WPFLektion
             //    number2 = 0;
             //}
             txtDisplay.Text = "0";
-            newNumber = true;
+            initButtonPress = true;
         }
 
-
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            result = 0;
+            Numbers.Clear();
+            operation = "";
+            labelCurrentOperation.Content = "";
+            txtDisplay.Text = "0";
+            ctr = 0;
+            initButtonPress = true;
+            buttonPressed = false;
+        }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
