@@ -81,9 +81,7 @@ namespace WPFLektion
             // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
             CreateNumber();
 
-            string output = labelCurrentOperation.Content + btnNum.ToString();
-
-            labelCurrentOperation.Content = output;
+            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
 
             decimal number = Numbers[ctr - 1];
 
@@ -195,7 +193,26 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
+            if (newNumber == false)
+            {
+                string output = labelCurrentOperation.Content.ToString();
 
+                output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
+
+                if (output.Last() == '-')
+                {
+                    output.Remove((output.Last() - 1), 1);
+                }
+                else
+                {
+                    output += "-";
+                }
+
+                labelCurrentOperation.Content = output + Numbers[ctr - 1].ToString();
+
+                Numbers[ctr - 1] *= -1;
+                txtDisplay.Text = Numbers[ctr - 1].ToString();
+            }
         }
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
