@@ -23,9 +23,12 @@ namespace WPFLektion
         List<decimal> Numbers = new List<decimal>();
         decimal result = 0;
         string operation = "";
-        bool initButtonPress = true;
+        bool newNumber = true;
         bool buttonPressed = false;
         int ctr = 0;
+
+        int charactersPressed = 0;
+        int currentNumberCharacters = 0;
 
         public MainWindow()
         {
@@ -34,12 +37,12 @@ namespace WPFLektion
 
         public void CreateNumber()
         {
-            if (initButtonPress)
+            if (newNumber)
             {
                 decimal number = 0;
                 Numbers.Add(number);
                 ctr++;
-                initButtonPress = false;
+                newNumber = false;
             }
         }
 
@@ -72,10 +75,15 @@ namespace WPFLektion
                 labelCurrentOperation.Content = "";
             }
 
+            charactersPressed++;
+            currentNumberCharacters++;
+
             // Vid en knapptryckning vill vi skapa ett nummer tills man trycker på en operation
             CreateNumber();
 
-            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+            string output = labelCurrentOperation.Content + btnNum.ToString();
+
+            labelCurrentOperation.Content = output;
 
             decimal number = Numbers[ctr - 1];
 
@@ -132,7 +140,9 @@ namespace WPFLektion
             ChangeNumber(Numbers.Last());
             txtDisplay.Text = result.ToString();
             operation = operand;
-            initButtonPress = true;
+            newNumber = true;
+            charactersPressed++;
+            currentNumberCharacters = 0;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
@@ -180,7 +190,7 @@ namespace WPFLektion
 
             txtDisplay.Text = result.ToString();
 
-            initButtonPress = true;
+            newNumber = true;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
@@ -197,16 +207,19 @@ namespace WPFLektion
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
         {
-            //if (operation == "")
-            //{
-            //    number1 = 0;
-            //}
-            //else
-            //{
-            //    number2 = 0;
-            //}
+            string output = labelCurrentOperation.Content.ToString();
+
+            output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
+            charactersPressed -= currentNumberCharacters;
+            currentNumberCharacters = 0;
+
+            labelCurrentOperation.Content = output;
+
+            ctr--;
+            Numbers.Remove(Numbers[ctr]);
+
             txtDisplay.Text = "0";
-            initButtonPress = true;
+            newNumber = true;
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -217,7 +230,7 @@ namespace WPFLektion
             labelCurrentOperation.Content = "";
             txtDisplay.Text = "0";
             ctr = 0;
-            initButtonPress = true;
+            newNumber = true;
             buttonPressed = false;
         }
 
