@@ -44,13 +44,13 @@ namespace WPFLektion
             charactersPressed -= currentNumberCharacters;
             currentNumberCharacters = 0;
 
-            labelCurrentOperation.Content = output;
-
-            //ctr--;
+            //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
             Numbers.Remove(Numbers[ctr]);
-
-            txtDisplay.Text = "0";
             newNumber = true;
+
+            //Display
+            labelCurrentOperation.Content = output;
+            txtDisplay.Text = "0";
         }
 
         public void CreateNumber()
@@ -59,7 +59,6 @@ namespace WPFLektion
             {
                 decimal number = 0;
                 Numbers.Add(number);
-                //ctr++;
                 newNumber = false;
             }
         }
@@ -98,7 +97,6 @@ namespace WPFLektion
 
             CreateNumber();
 
-
             decimal number = Numbers[ctr];
 
             number = number * 10 + btnNum;
@@ -109,46 +107,7 @@ namespace WPFLektion
             labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
         }
 
-        private void btn1_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(1);
-        }
-        private void btn2_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(2);
-        }
-        private void btn3_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(3);
-        }
-        private void btn4_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(4);
-        }
-        private void btn5_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(5);
-        }
-        private void btn6_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(6);
-        }
-        private void btn7_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(7);
-        }
-        private void btn8_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(8);
-        }
-        private void btn9_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(9);
-        }
-        private void btn0_Click(object sender, RoutedEventArgs e)
-        {
-            NumAppend(0);
-        }
+
 
 
         private void OperationSituation(string operand)
@@ -172,31 +131,7 @@ namespace WPFLektion
 
         }
 
-        private void btnPlus_Click(object sender, RoutedEventArgs e)
-        {
-            OperationSituation("+");
 
-            //operation = "+";
-            //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
-            //ChangeNumber(Numbers[ctr - 1]);
-            //txtDisplay.Text = result.ToString();
-            //initButtonPress = true;
-        }
-
-        private void btnMinus_Click(object sender, RoutedEventArgs e)
-        {
-            OperationSituation("-");
-        }
-
-        private void btnTimes_Click(object sender, RoutedEventArgs e)
-        {
-            OperationSituation("*");
-        }
-
-        private void btnDivide_Click(object sender, RoutedEventArgs e)
-        {
-            OperationSituation("/");
-        }
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
@@ -284,6 +219,73 @@ namespace WPFLektion
         private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void btnPlus_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("+");
+
+            //operation = "+";
+            //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
+            //ChangeNumber(Numbers[ctr - 1]);
+            //txtDisplay.Text = result.ToString();
+            //initButtonPress = true;
+        }
+
+        private void btnMinus_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("-");
+        }
+
+        private void btnTimes_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("*");
+        }
+
+        private void btnDivide_Click(object sender, RoutedEventArgs e)
+        {
+            OperationSituation("/");
+        }
+
+        private void btn1_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(1);
+        }
+        private void btn2_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(2);
+        }
+        private void btn3_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(3);
+        }
+        private void btn4_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(4);
+        }
+        private void btn5_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(5);
+        }
+        private void btn6_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(6);
+        }
+        private void btn7_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(7);
+        }
+        private void btn8_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(8);
+        }
+        private void btn9_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(9);
+        }
+        private void btn0_Click(object sender, RoutedEventArgs e)
+        {
+            NumAppend(0);
         }
     }
 }
