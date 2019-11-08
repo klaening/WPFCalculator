@@ -26,9 +26,9 @@ namespace WPFLektion
         bool newNumber = true;
         bool buttonPressed = false;
         //För att veta vilken plats i listan jag är på
-        int ctr = 0;
+        int current = 0;
 
-        int charactersPressed = 0;
+        int charactersPressed;
         int currentNumberCharacters = 0;
 
         public MainWindow()
@@ -45,7 +45,7 @@ namespace WPFLektion
             currentNumberCharacters = 0;
 
             //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
-            Numbers.Remove(Numbers[ctr]);
+            Numbers.Remove(Numbers[current]);
             newNumber = true;
 
             //Display
@@ -92,23 +92,20 @@ namespace WPFLektion
                 
             //}
 
-            charactersPressed++;
-            currentNumberCharacters++;
+            //charactersPressed++;
+            //currentNumberCharacters++;
 
             CreateNumber();
 
-            decimal number = Numbers[ctr];
+            decimal number = Numbers[current];
 
             number = number * 10 + btnNum;
-            Numbers[ctr] = number;
+            Numbers[current] = number;
 
             //Display
             txtDisplay.Text = number.ToString();
             labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
         }
-
-
-
 
         private void OperationSituation(string operand)
         {
@@ -120,8 +117,8 @@ namespace WPFLektion
                 operation = operand;
                 newNumber = true;
 
-                ctr++;
-                charactersPressed++;
+                current++;
+                //charactersPressed++;
                 currentNumberCharacters = 0;
             }
         }
@@ -130,8 +127,6 @@ namespace WPFLektion
         {
 
         }
-
-
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
@@ -148,44 +143,27 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            if (newNumber == false)
+            if (labelCurrentOperation.Content != null)
             {
+                //Gör om det som står till string så att jag kommer åt metoden Length
                 string output = labelCurrentOperation.Content.ToString();
+                string currentNumber = Numbers.Last().ToString();
 
-                if (Numbers[ctr] < 0)
-                {
-                    currentNumberCharacters++;
-                    output = output.Remove((charactersPressed - currentNumberCharacters), (currentNumberCharacters));
-                }
-                else
-                {
+                //Med metoden Length kan jag få reda på hur lång senaste numret är och hur många chars total som står på skärmen
+                currentNumberCharacters = currentNumber.Length;
+                charactersPressed = output.Length;
 
-                }
+                //Med denna information kan vi ta bort det senaste numret som skrevs in
+                output = output.Remove((charactersPressed - currentNumberCharacters), (currentNumberCharacters));
 
-                output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
+                //Och sen omvandla numret till negativt alternativt positivt
+                Numbers[current] *= -1;
 
-                if (output.Last() == '-')
-                {
-                    output.Remove((output.Last() - 1), 1);
-                    currentNumberCharacters--;
-                    charactersPressed--;
-                }
-
-                Numbers[ctr] *= -1;
-
-                if (Numbers[ctr] < 0)
-                {
-                    currentNumberCharacters++;
-                    charactersPressed++;
-                }
-
-                txtDisplay.Text = Numbers[ctr].ToString();
-
-                labelCurrentOperation.Content = output + Numbers[ctr].ToString();
+                //Display
+                txtDisplay.Text = Numbers[current].ToString();
+                labelCurrentOperation.Content = output + Numbers[current].ToString();
             }
         }
-
-
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
@@ -194,25 +172,37 @@ namespace WPFLektion
             operation = "";
             labelCurrentOperation.Content = "";
             txtDisplay.Text = "0";
-            ctr = 0;
+            current = 0;
             newNumber = true;
             buttonPressed = false;
+            charactersPressed = 0;
+            currentNumberCharacters = 0;
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
-            List<char> IndivNumbers = new List<char>();
-            if (operation == "")
+            string currentNumber = Numbers.Last().ToString();
+
+            if (currentNumber != "")
             {
-                //IndivNumbers = number1.ToString().ToList();
-                //IndivNumbers.Remove(IndivNumbers[IndivNumbers.Count-1]);
-                //number1 = int.Parse(IndivNumbers.ToString());
-            }
-            else
-            {
-                //IndivNumbers = number2.ToString().ToList();
-                //IndivNumbers.Remove(IndivNumbers[IndivNumbers.Count-1]);
-                //number2 = int.Parse(IndivNumbers.ToString());
+                currentNumber = currentNumber.Remove(currentNumber.Length - 1);
+                string output = labelCurrentOperation.Content.ToString();
+                
+
+                //Måste det här vara en if? Nu går den inte in hit pga förra ifen
+                if (currentNumber == "")
+                {
+                    Numbers[current] = 0;
+                }
+                else
+                {
+                    Numbers[current] = decimal.Parse(currentNumber);
+
+                    charactersPressed = output.Length;
+                    output = output.Remove(charactersPressed - 1);
+                    labelCurrentOperation.Content = output;
+                    txtDisplay.Text = Numbers[current].ToString();
+                }
             }
         }
 
