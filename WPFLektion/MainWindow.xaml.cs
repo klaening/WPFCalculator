@@ -20,6 +20,10 @@ namespace WPFLektion
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
+
+
+
         List<decimal> Numbers = new List<decimal>();
         decimal result = 0;
         string operation = "";
@@ -29,7 +33,7 @@ namespace WPFLektion
         int current = 0;
 
         int charactersPressed;
-        int currentNumberCharacters = 0;
+        int currentNumberCharacters;
 
         public MainWindow()
         {
@@ -91,9 +95,6 @@ namespace WPFLektion
             //{
                 
             //}
-
-            //charactersPressed++;
-            //currentNumberCharacters++;
 
             CreateNumber();
 
@@ -183,19 +184,25 @@ namespace WPFLektion
         {
             string currentNumber = Numbers.Last().ToString();
 
-            if (currentNumber != "")
+            if (currentNumber != "0")
             {
                 currentNumber = currentNumber.Remove(currentNumber.Length - 1);
                 string output = labelCurrentOperation.Content.ToString();
-                
 
                 //Måste det här vara en if? Nu går den inte in hit pga förra ifen
-                if (currentNumber == "")
+                if (txtDisplay.Text == "")
                 {
                     Numbers[current] = 0;
+                    output = output.Remove(charactersPressed - 1);
+                    labelCurrentOperation.Content = output;
+                    txtDisplay.Text = Numbers[current].ToString();
                 }
                 else
                 {
+                    if (currentNumber == "")
+                    {
+                        currentNumber = "0";
+                    }
                     Numbers[current] = decimal.Parse(currentNumber);
 
                     charactersPressed = output.Length;
