@@ -20,6 +20,18 @@ namespace WPFLektion
     /// </summary>
     public partial class MainWindow : Window
     {
+        //När jag trycker på ett nummer så läggs det till i txt.Display
+        //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
+        //Om txt.Displays första char är ',' så läggs en nolla till innan
+        //Om man trycker backspace så tas sista char bort från txt.Display
+        //Om man trycker CE så tas hela txt.Display bort och ersätts med en nolla
+        //När man trycker på en operation så parseas txt.Display till en decimal som läggs till i en lista
+        //result uppdateras med det nya numret och result skrivs ut på txt.Display
+        //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
+
+
+
+
         //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
         //Varje knapptryckning lägger till i textbox och label.
         //Label skriver in vad som händer i textbox.
@@ -29,7 +41,7 @@ namespace WPFLektion
 
         List<decimal> Numbers = new List<decimal>();
 
-        decimal activeNumber = 0;
+        string activeNumber = "0";
 
         decimal result = 0;
         string operation = "";
@@ -60,12 +72,9 @@ namespace WPFLektion
 
         public void CreateNumber()
         {
-            if (newNumber)
-            {
-                activeNumber = decimal.Parse(txtDisplay.Text);
-                //decimal number = 0;
-                Numbers.Add(activeNumber);
-            }
+            decimal number = 0;
+            Numbers.Add(number);
+            newNumber = false;
         }
 
         public void ChangeNumber(decimal aNumber)
@@ -73,59 +82,42 @@ namespace WPFLektion
             switch (operation)
             {
                 case "+":
-                    result = result + aNumber;
+                    result += aNumber;
                     break;
                 case "-":
                     result -= aNumber;
                     break;
                 case "*":
-                    result = result * aNumber;
+                    result *= aNumber;
                     break;
                 case "/":
                     result /= aNumber;
-                    break;
-                default:
-                    result = result + aNumber;
                     break;
             }
         }
 
         public void NumAppend(int btnNum)
         {
-            if (!newNumber)
+            if (newNumber)
             {
-                txtDisplay.Clear();
-                newNumber = true;
+                CreateNumber();
             }
 
-            if (txtDisplay.Text == "0")
+            if (activeNumber.First() == '0')
             {
-                txtDisplay.Clear();
+                if (activeNumber.First() + 1 != ',')
+                {
+                    txtDisplay.Clear();
+                    activeNumber = activeNumber.Remove(activeNumber.Length - 1);
+                }
             }
-            txtDisplay.Text += btnNum.ToString();
+            activeNumber += btnNum.ToString();
+            txtDisplay.Text = activeNumber;
             
             if (txtDisplay.Text.First().ToString() != "0")
             {
                 labelCurrentOperation.Content += txtDisplay.Text.Last().ToString();
             }
-
-
-
-            //if (buttonPressed)
-            //{
-
-            //}
-
-            //CreateNumber();
-
-            //decimal number = Numbers[current];
-
-            //number = number * 10 + btnNum;
-            //Numbers[current] = number;
-
-            ////Display
-            //txtDisplay.Text = number.ToString();
-            //labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
         }
 
         private void OperationSituation(string operand)
@@ -148,7 +140,11 @@ namespace WPFLektion
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!activeNumber.Contains(','))
+            {
+                labelCurrentOperation.Content += ",";
+                txtDisplay.Text += ",";
+            }
         }
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
@@ -158,18 +154,6 @@ namespace WPFLektion
             ChangeNumber(Numbers.Last());
 
             txtDisplay.Text = result.ToString();
-
-
-
-            //if (!buttonPressed)
-            //{
-            //    ChangeNumber(Numbers.Last());
-            //    buttonPressed = true;
-            //}
-
-            //txtDisplay.Text = result.ToString();
-
-            //newNumber = true;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
@@ -227,38 +211,6 @@ namespace WPFLektion
             {
                 txtDisplay.Text = "0";
             }
-
-
-
-            //string currentNumber = Numbers.Last().ToString();
-
-            //if (currentNumber != "0")
-            //{
-            //    currentNumber = currentNumber.Remove(currentNumber.Length - 1);
-            //    string output = labelCurrentOperation.Content.ToString();
-
-            //    //Måste det här vara en if? Nu går den inte in hit pga förra ifen
-            //    if (txtDisplay.Text == "")
-            //    {
-            //        Numbers[current] = 0;
-            //        output = output.Remove(charactersPressed - 1);
-            //        labelCurrentOperation.Content = output;
-            //        txtDisplay.Text = Numbers[current].ToString();
-            //    }
-            //    else
-            //    {
-            //        if (currentNumber == "")
-            //        {
-            //            currentNumber = "0";
-            //        }
-            //        Numbers[current] = decimal.Parse(currentNumber);
-
-            //        charactersPressed = output.Length;
-            //        output = output.Remove(charactersPressed - 1);
-            //        labelCurrentOperation.Content = output;
-            //        txtDisplay.Text = Numbers[current].ToString();
-            //    }
-            //}
         }
 
         private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
@@ -269,12 +221,6 @@ namespace WPFLektion
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
             OperationSituation("+");
-
-            //operation = "+";
-            //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
-            //ChangeNumber(Numbers[ctr - 1]);
-            //txtDisplay.Text = result.ToString();
-            //initButtonPress = true;
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
