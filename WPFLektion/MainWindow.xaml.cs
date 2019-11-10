@@ -22,8 +22,6 @@ namespace WPFLektion
     {
         //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
 
-
-
         List<decimal> Numbers = new List<decimal>();
         decimal result = 0;
         string operation = "";
