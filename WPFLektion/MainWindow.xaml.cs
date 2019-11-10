@@ -26,7 +26,7 @@ namespace WPFLektion
         decimal result = 0;
         string operation = "";
         bool newNumber = true;
-        bool buttonPressed = false;
+        bool equalsPressed = false;
         //För att veta vilken plats i listan jag är på
         int current = 0;
 
@@ -40,19 +40,23 @@ namespace WPFLektion
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
         {
-            string output = labelCurrentOperation.Content.ToString();
+            if (txtDisplay.Text != "0" && !equalsPressed)
+            {
+                string output = labelCurrentOperation.Content.ToString();
+                charactersPressed = labelCurrentOperation.Content.ToString().Length;
+                currentNumberCharacters = txtDisplay.Text.Length;
 
-            output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
-            charactersPressed -= currentNumberCharacters;
-            currentNumberCharacters = 0;
+                output = output.Remove(charactersPressed - currentNumberCharacters);
 
-            //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
-            Numbers.Remove(Numbers[current]);
-            newNumber = true;
+                //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
 
-            //Display
-            labelCurrentOperation.Content = output;
-            txtDisplay.Text = "0";
+                Numbers.Remove(Numbers[current]);
+                newNumber = true;
+
+                //Display
+                labelCurrentOperation.Content = output;
+                txtDisplay.Text = "0";
+            }        
         }
 
         public void CreateNumber()
@@ -89,26 +93,24 @@ namespace WPFLektion
 
         public void NumAppend(int btnNum)
         {
-            //if (buttonPressed)
-            //{
-                
-            //}
+            if (!equalsPressed)
+            {
+                CreateNumber();
 
-            CreateNumber();
+                decimal number = Numbers[current];
 
-            decimal number = Numbers[current];
+                number = number * 10 + btnNum;
+                Numbers[current] = number;
 
-            number = number * 10 + btnNum;
-            Numbers[current] = number;
-
-            //Display
-            txtDisplay.Text = number.ToString();
-            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+                //Display
+                txtDisplay.Text = number.ToString();
+                labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+            }
         }
 
         private void OperationSituation(string operand)
         {
-            if (newNumber == false)
+            if (newNumber == false && !equalsPressed)
             {
                 labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
                 ChangeNumber(Numbers.Last());
@@ -117,8 +119,6 @@ namespace WPFLektion
                 newNumber = true;
 
                 current++;
-                //charactersPressed++;
-                currentNumberCharacters = 0;
             }
         }
 
@@ -129,10 +129,10 @@ namespace WPFLektion
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-            if (!buttonPressed)
+            if (!equalsPressed)
             {
                 ChangeNumber(Numbers.Last());
-                buttonPressed = true;
+                equalsPressed = true;
             }
 
             txtDisplay.Text = result.ToString();
@@ -142,7 +142,7 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            if (labelCurrentOperation.Content != null)
+            if (labelCurrentOperation.Content != null && !equalsPressed)
             {
                 //Gör om det som står till string så att jag kommer åt metoden Length
                 string output = labelCurrentOperation.Content.ToString();
@@ -153,13 +153,13 @@ namespace WPFLektion
                 charactersPressed = output.Length;
 
                 //Med denna information kan vi ta bort det senaste numret som skrevs in
-                output = output.Remove((charactersPressed - currentNumberCharacters), (currentNumberCharacters));
+                output = output.Remove(charactersPressed - currentNumberCharacters);
 
                 //Och sen omvandla numret till negativt alternativt positivt
                 Numbers[current] *= -1;
 
                 //Display
-                txtDisplay.Text = Numbers[current].ToString();
+                txtDisplay.Text = Numbers.Last().ToString();
                 labelCurrentOperation.Content = output + Numbers[current].ToString();
             }
         }
@@ -173,16 +173,14 @@ namespace WPFLektion
             txtDisplay.Text = "0";
             current = 0;
             newNumber = true;
-            buttonPressed = false;
-            charactersPressed = 0;
-            currentNumberCharacters = 0;
+            equalsPressed = false;
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
             string currentNumber = Numbers.Last().ToString();
 
-            if (currentNumber != "0")
+            if (currentNumber != "0" && !equalsPressed)
             {
                 currentNumber = currentNumber.Remove(currentNumber.Length - 1);
                 string output = labelCurrentOperation.Content.ToString();
