@@ -21,8 +21,16 @@ namespace WPFLektion
     public partial class MainWindow : Window
     {
         //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
+        //Varje knapptryckning lägger till i textbox och label.
+        //Label skriver in vad som händer i textbox.
+        //När man trycker på en operation eller likamed så parseas textbox till en decimal. Label går vidare
+        //När en string parseas läggs den till i result beroende på vilken operation man har aktiv.
+
 
         List<decimal> Numbers = new List<decimal>();
+
+        decimal activeNumber = 0;
+
         decimal result = 0;
         string operation = "";
         bool newNumber = true;
@@ -42,26 +50,21 @@ namespace WPFLektion
         {
             string output = labelCurrentOperation.Content.ToString();
 
-            output = output.Remove((charactersPressed - currentNumberCharacters), currentNumberCharacters);
-            charactersPressed -= currentNumberCharacters;
-            currentNumberCharacters = 0;
-
-            //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
-            Numbers.Remove(Numbers[current]);
-            newNumber = true;
+            //Tar bort sista numret
+            output = output.Remove(output.Length - txtDisplay.Text.Length);
+            txtDisplay.Text = "0";            
 
             //Display
             labelCurrentOperation.Content = output;
-            txtDisplay.Text = "0";
         }
 
         public void CreateNumber()
         {
             if (newNumber)
             {
-                decimal number = 0;
-                Numbers.Add(number);
-                newNumber = false;
+                activeNumber = decimal.Parse(txtDisplay.Text);
+                //decimal number = 0;
+                Numbers.Add(activeNumber);
             }
         }
 
@@ -89,36 +92,57 @@ namespace WPFLektion
 
         public void NumAppend(int btnNum)
         {
+            if (!newNumber)
+            {
+                txtDisplay.Clear();
+                newNumber = true;
+            }
+
+            if (txtDisplay.Text == "0")
+            {
+                txtDisplay.Clear();
+            }
+            txtDisplay.Text += btnNum.ToString();
+            
+            if (txtDisplay.Text.First().ToString() != "0")
+            {
+                labelCurrentOperation.Content += txtDisplay.Text.Last().ToString();
+            }
+
+
+
             //if (buttonPressed)
             //{
-                
+
             //}
 
-            CreateNumber();
+            //CreateNumber();
 
-            decimal number = Numbers[current];
+            //decimal number = Numbers[current];
 
-            number = number * 10 + btnNum;
-            Numbers[current] = number;
+            //number = number * 10 + btnNum;
+            //Numbers[current] = number;
 
-            //Display
-            txtDisplay.Text = number.ToString();
-            labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+            ////Display
+            //txtDisplay.Text = number.ToString();
+            //labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
         }
 
         private void OperationSituation(string operand)
         {
-            if (newNumber == false)
+            //Så fort jag trycker på en operation så parseas txt.display till en decimal och läggs till i en lista av nummer.
+
+            //if newnumber är true så går den in och skapar ett nummer och sätter bool till false.
+
+            CreateNumber();
+
+            if (newNumber == true)
             {
                 labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
                 ChangeNumber(Numbers.Last());
                 txtDisplay.Text = result.ToString();
                 operation = operand;
-                newNumber = true;
-
-                current++;
-                //charactersPressed++;
-                currentNumberCharacters = 0;
+                newNumber = false;
             }
         }
 
@@ -129,15 +153,23 @@ namespace WPFLektion
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-            if (!buttonPressed)
-            {
-                ChangeNumber(Numbers.Last());
-                buttonPressed = true;
-            }
+            CreateNumber();
+
+            ChangeNumber(Numbers.Last());
 
             txtDisplay.Text = result.ToString();
 
-            newNumber = true;
+
+
+            //if (!buttonPressed)
+            //{
+            //    ChangeNumber(Numbers.Last());
+            //    buttonPressed = true;
+            //}
+
+            //txtDisplay.Text = result.ToString();
+
+            //newNumber = true;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
@@ -180,35 +212,53 @@ namespace WPFLektion
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
-            string currentNumber = Numbers.Last().ToString();
+            //Skapar en tillfällig string för att kunna ta bort sista karaktären i displayen
+            string output = labelCurrentOperation.Content.ToString();
+            charactersPressed = labelCurrentOperation.Content.ToString().Length;
+            currentNumberCharacters = txtDisplay.Text.Length;
 
-            if (currentNumber != "0")
+            if (txtDisplay.Text != "0")
             {
-                currentNumber = currentNumber.Remove(currentNumber.Length - 1);
-                string output = labelCurrentOperation.Content.ToString();
-
-                //Måste det här vara en if? Nu går den inte in hit pga förra ifen
-                if (txtDisplay.Text == "")
-                {
-                    Numbers[current] = 0;
-                    output = output.Remove(charactersPressed - 1);
-                    labelCurrentOperation.Content = output;
-                    txtDisplay.Text = Numbers[current].ToString();
-                }
-                else
-                {
-                    if (currentNumber == "")
-                    {
-                        currentNumber = "0";
-                    }
-                    Numbers[current] = decimal.Parse(currentNumber);
-
-                    charactersPressed = output.Length;
-                    output = output.Remove(charactersPressed - 1);
-                    labelCurrentOperation.Content = output;
-                    txtDisplay.Text = Numbers[current].ToString();
-                }
+                txtDisplay.Text = txtDisplay.Text.Remove(currentNumberCharacters - 1);
+                output = output.Remove(charactersPressed - 1);
+                labelCurrentOperation.Content = output;
             }
+            if (txtDisplay.Text == "")
+            {
+                txtDisplay.Text = "0";
+            }
+
+
+
+            //string currentNumber = Numbers.Last().ToString();
+
+            //if (currentNumber != "0")
+            //{
+            //    currentNumber = currentNumber.Remove(currentNumber.Length - 1);
+            //    string output = labelCurrentOperation.Content.ToString();
+
+            //    //Måste det här vara en if? Nu går den inte in hit pga förra ifen
+            //    if (txtDisplay.Text == "")
+            //    {
+            //        Numbers[current] = 0;
+            //        output = output.Remove(charactersPressed - 1);
+            //        labelCurrentOperation.Content = output;
+            //        txtDisplay.Text = Numbers[current].ToString();
+            //    }
+            //    else
+            //    {
+            //        if (currentNumber == "")
+            //        {
+            //            currentNumber = "0";
+            //        }
+            //        Numbers[current] = decimal.Parse(currentNumber);
+
+            //        charactersPressed = output.Length;
+            //        output = output.Remove(charactersPressed - 1);
+            //        labelCurrentOperation.Content = output;
+            //        txtDisplay.Text = Numbers[current].ToString();
+            //    }
+            //}
         }
 
         private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
