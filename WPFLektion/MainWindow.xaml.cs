@@ -29,11 +29,12 @@ namespace WPFLektion
         //När man trycker på en operation så parseas txt.Display till en decimal som läggs till i en lista
         //result uppdateras med det nya numret och result skrivs ut på txt.Display
         //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
-
         string operation = "";
         decimal result = 0;
-        decimal lastResult = 0;
         bool buttonPressed = false;
+
+        string Add = "Add";
+        string Remove = "Remove";
 
         //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
         //Varje knapptryckning lägger till i textbox och label.
@@ -48,13 +49,28 @@ namespace WPFLektion
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
         {
-            txtDisplay.Text = "0";
+            if (!buttonPressed && txtDisplay.Text != "0")
+            {
+                ChangeLabelContent(Remove, txtDisplay.Text);               
+                txtDisplay.Text = "0";
+            }
         }
 
-        //public void CreateNumber()
-        //{
-
-        //}
+        public void ChangeLabelContent(string addOrRemove, string input)
+        {
+            switch (addOrRemove)
+            {
+                case "Add":
+                    labelCurrentOperation.Content += input;
+                    break;
+                case "Remove":
+                    string content = labelCurrentOperation.Content.ToString();
+                    int contentLength = content.Length;
+                    content = content.Remove(contentLength - input.Length);
+                    labelCurrentOperation.Content = content;
+                    break;
+            }
+        }
 
         public void MakeCalculation()
         {
@@ -107,24 +123,45 @@ namespace WPFLektion
                     txtDisplay.Text = btnNum.ToString();
                 }
             }
+
+            ChangeLabelContent(Add, btnNum.ToString());
         }
 
         private void Operation(string aOperation)
         {
             //Så fort jag trycker på en operation så parseas txt.display till en decimal och uppdaterar result
-
             MakeCalculation();
             operation = aOperation;
             txtDisplay.Text = result.ToString();
+            if (!buttonPressed)
+            {
+                ChangeLabelContent(Add, operation);
+            }
             buttonPressed = true;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
         {
-            //Om txt.Displays första char är ',' så läggs en nolla till innan
-            if (!txtDisplay.Text.Contains(','))
+            if (!txtDisplay.Text.Contains(',') && !buttonPressed)
             {
-                txtDisplay.Text += ","; 
+                if (txtDisplay.Text == "0")
+                {
+                    txtDisplay.Clear();
+                    txtDisplay.Text = "0,";
+                    ChangeLabelContent(Add, txtDisplay.Text);
+                }
+                else
+                {
+                    txtDisplay.Text += ",";
+                    ChangeLabelContent(Add, ",");
+                }
+            }
+            else if(buttonPressed)
+            {
+                txtDisplay.Clear();
+                txtDisplay.Text = "0,";
+                ChangeLabelContent(Add, txtDisplay.Text);
+                buttonPressed = false;
             }
         }
 
@@ -132,39 +169,44 @@ namespace WPFLektion
         {
             MakeCalculation();
             txtDisplay.Text = result.ToString();
+            labelCurrentOperation.Content = "";
             operation = "";
             buttonPressed = true;
-            lastResult = result;
             result = 0;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            if (!buttonPressed)
+            if (buttonPressed || txtDisplay.Text == "0")
             {
-                if (txtDisplay.Text == "0" && !txtDisplay.Text.Contains("-"))
+                txtDisplay.Clear();
+                txtDisplay.Text = "-";
+                ChangeLabelContent(Add, txtDisplay.Text);
+                buttonPressed = false;
+            }
+            //Skriver bara ut om buttonPressed == false.
+            else if (!buttonPressed)
+            {
+                //Om txt innehåller - så skrivs ett - ut.
+                if (!txtDisplay.Text.Contains("-"))
                 {
-                    txtDisplay.Text = "-";
+                    ChangeLabelContent(Remove, txtDisplay.Text);
+                    string saveString = txtDisplay.Text;
+                    txtDisplay.Clear();
+                    txtDisplay.Text = "-" + saveString;
+                    ChangeLabelContent(Add, txtDisplay.Text);
                 }
-                else if (txtDisplay.Text.Contains("-"))
+                //Annars tas det bort
+                else
                 {
+                    ChangeLabelContent(Remove, txtDisplay.Text);
                     txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
+                    ChangeLabelContent(Add, txtDisplay.Text);
                     if (txtDisplay.Text == "")
                     {
                         txtDisplay.Text = "0";
                     }
                 }
-                else
-                {
-                    string saveString = txtDisplay.Text;
-                    txtDisplay.Clear();
-                    txtDisplay.Text = "-" + saveString;
-                } 
-            }
-            else
-            {
-                txtDisplay.Clear();
-                txtDisplay.Text = "-";
             }
         }
 
@@ -173,14 +215,18 @@ namespace WPFLektion
             txtDisplay.Clear();
             txtDisplay.Text = "0";
             result = 0;
+            labelCurrentOperation.Content = "";
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
             int length = txtDisplay.Text.Length;
-            if (txtDisplay.Text != "0")
+            if (txtDisplay.Text != "0" && !buttonPressed)
             {
+                //Uppdaterar labelCurrentOperation.Content
+                ChangeLabelContent(Remove, "1");
                 txtDisplay.Text = txtDisplay.Text.Remove(length - 1);
+
                 if (txtDisplay.Text == "")
                 {
                     txtDisplay.Text = "0";
