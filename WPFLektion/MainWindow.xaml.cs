@@ -20,18 +20,27 @@ namespace WPFLektion
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
-
-        List<decimal> Numbers = new List<decimal>();
-        decimal result = 0;
+        //label uppdateras beroende på vad som står i txt.Display och hur många karaktärer som finns
+        //När jag trycker på ett nummer så läggs det till i txt.Display
+        //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
+        //Om txt.Displays första char är ',' så läggs en nolla till innan
+        //Om man trycker backspace så tas sista char bort från txt.Display
+        //Om man trycker CE så tas hela txt.Display bort och ersätts med en nolla
+        //När man trycker på en operation så parseas txt.Display till en decimal som läggs till i en lista
+        //result uppdateras med det nya numret och result skrivs ut på txt.Display
+        //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
         string operation = "";
-        bool newNumber = true;
-        bool equalsPressed = false;
-        //För att veta vilken plats i listan jag är på
-        int current = 0;
+        decimal result = 0;
+        bool buttonPressed = false;
 
-        int charactersPressed;
-        int currentNumberCharacters;
+        string Add = "Add";
+        string Remove = "Remove";
+
+        //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
+        //Varje knapptryckning lägger till i textbox och label.
+        //Label skriver in vad som händer i textbox.
+        //När man trycker på en operation eller likamed så parseas textbox till en decimal. Label går vidare
+        //När en string parseas läggs den till i result beroende på vilken operation man har aktiv.
 
         public MainWindow()
         {
@@ -40,171 +49,187 @@ namespace WPFLektion
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
         {
-            if (txtDisplay.Text != "0" && !equalsPressed)
+            if (!buttonPressed && txtDisplay.Text != "0")
             {
-                string output = labelCurrentOperation.Content.ToString();
-                charactersPressed = labelCurrentOperation.Content.ToString().Length;
-                currentNumberCharacters = txtDisplay.Text.Length;
-
-                output = output.Remove(charactersPressed - currentNumberCharacters);
-
-                //Tar bort sista numret och skapar ett nytt vid tryckning av nummer
-
-                Numbers.Remove(Numbers[current]);
-                newNumber = true;
-
-                //Display
-                labelCurrentOperation.Content = output;
+                ChangeLabelContent(Remove, txtDisplay.Text);               
                 txtDisplay.Text = "0";
-            }        
-        }
-
-        public void CreateNumber()
-        {
-            if (newNumber)
-            {
-                decimal number = 0;
-                Numbers.Add(number);
-                newNumber = false;
             }
         }
 
-        public void ChangeNumber(decimal aNumber)
+        public void ChangeLabelContent(string addOrRemove, string input)
         {
+            switch (addOrRemove)
+            {
+                case "Add":
+                    labelCurrentOperation.Content += input;
+                    break;
+                case "Remove":
+                    string content = labelCurrentOperation.Content.ToString();
+                    int contentLength = content.Length;
+                    content = content.Remove(contentLength - input.Length);
+                    labelCurrentOperation.Content = content;
+                    break;
+            }
+        }
+
+        public void MakeCalculation()
+        {
+            decimal number = decimal.Parse(txtDisplay.Text);
+
             switch (operation)
             {
                 case "+":
-                    result = result + aNumber;
+                    result += number;
                     break;
                 case "-":
-                    result -= aNumber;
+                    result -= number;
                     break;
                 case "*":
-                    result = result * aNumber;
+                    result *= number;
                     break;
                 case "/":
-                    result /= aNumber;
+                    result /= number;
                     break;
                 default:
-                    result = result + aNumber;
+                    if (!buttonPressed)
+                    {
+                        result += number;
+                    }
                     break;
             }
         }
 
         public void NumAppend(int btnNum)
         {
-            if (!equalsPressed)
+            //När jag trycker på ett nummer så läggs det till i txt.Display
+            //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
+            if (buttonPressed)
             {
-                CreateNumber();
-
-                decimal number = Numbers[current];
-
-                number = number * 10 + btnNum;
-                Numbers[current] = number;
-
-                //Display
-                txtDisplay.Text = number.ToString();
-                labelCurrentOperation.Content = labelCurrentOperation.Content + btnNum.ToString();
+                if (txtDisplay.Text != "-")
+                {
+                    txtDisplay.Clear();
+                }
+                buttonPressed = false;
             }
+
+            txtDisplay.Text += btnNum;
+
+            if (txtDisplay.Text.Length >= 2)
+            {
+                char[] charArray = txtDisplay.Text.ToCharArray();
+
+                if (txtDisplay.Text.First() == '0' && charArray[1] != ',')
+                {
+                    txtDisplay.Text = btnNum.ToString();
+                }
+            }
+
+            ChangeLabelContent(Add, btnNum.ToString());
         }
 
-        private void OperationSituation(string operand)
+        private void Operation(string aOperation)
         {
-            if (newNumber == false && !equalsPressed)
+            //Så fort jag trycker på en operation så parseas txt.display till en decimal och uppdaterar result
+            MakeCalculation();
+            operation = aOperation;
+            txtDisplay.Text = result.ToString();
+            if (!buttonPressed)
             {
-                labelCurrentOperation.Content = labelCurrentOperation.Content + operand;
-                ChangeNumber(Numbers.Last());
-                txtDisplay.Text = result.ToString();
-                operation = operand;
-                newNumber = true;
-
-                current++;
+                ChangeLabelContent(Add, operation);
             }
+            buttonPressed = true;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!txtDisplay.Text.Contains(',') && !buttonPressed)
+            {
+                if (txtDisplay.Text == "0")
+                {
+                    txtDisplay.Clear();
+                    txtDisplay.Text = "0,";
+                    ChangeLabelContent(Add, txtDisplay.Text);
+                }
+                else
+                {
+                    txtDisplay.Text += ",";
+                    ChangeLabelContent(Add, ",");
+                }
+            }
+            else if(buttonPressed)
+            {
+                txtDisplay.Clear();
+                txtDisplay.Text = "0,";
+                ChangeLabelContent(Add, txtDisplay.Text);
+                buttonPressed = false;
+            }
         }
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-            if (!equalsPressed)
-            {
-                ChangeNumber(Numbers.Last());
-                equalsPressed = true;
-            }
-
+            MakeCalculation();
             txtDisplay.Text = result.ToString();
-
-            newNumber = true;
+            labelCurrentOperation.Content = "";
+            operation = "";
+            buttonPressed = true;
+            result = 0;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            if (labelCurrentOperation.Content != null && !equalsPressed)
+            if (buttonPressed || txtDisplay.Text == "0")
             {
-                //Gör om det som står till string så att jag kommer åt metoden Length
-                string output = labelCurrentOperation.Content.ToString();
-                string currentNumber = Numbers.Last().ToString();
-
-                //Med metoden Length kan jag få reda på hur lång senaste numret är och hur många chars total som står på skärmen
-                currentNumberCharacters = currentNumber.Length;
-                charactersPressed = output.Length;
-
-                //Med denna information kan vi ta bort det senaste numret som skrevs in
-                output = output.Remove(charactersPressed - currentNumberCharacters);
-
-                //Och sen omvandla numret till negativt alternativt positivt
-                Numbers[current] *= -1;
-
-                //Display
-                txtDisplay.Text = Numbers.Last().ToString();
-                labelCurrentOperation.Content = output + Numbers[current].ToString();
+                txtDisplay.Clear();
+                txtDisplay.Text = "-";
+                ChangeLabelContent(Add, txtDisplay.Text);
+                buttonPressed = false;
+            }
+            //Skriver bara ut om buttonPressed == false.
+            else if (!buttonPressed)
+            {
+                //Om txt innehåller - så skrivs ett - ut.
+                if (!txtDisplay.Text.Contains("-"))
+                {
+                    ChangeLabelContent(Remove, txtDisplay.Text);
+                    string saveString = txtDisplay.Text;
+                    txtDisplay.Clear();
+                    txtDisplay.Text = "-" + saveString;
+                    ChangeLabelContent(Add, txtDisplay.Text);
+                }
+                //Annars tas det bort
+                else
+                {
+                    ChangeLabelContent(Remove, txtDisplay.Text);
+                    txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
+                    ChangeLabelContent(Add, txtDisplay.Text);
+                    if (txtDisplay.Text == "")
+                    {
+                        txtDisplay.Text = "0";
+                    }
+                }
             }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            result = 0;
-            Numbers.Clear();
-            operation = "";
-            labelCurrentOperation.Content = "";
+            txtDisplay.Clear();
             txtDisplay.Text = "0";
-            current = 0;
-            newNumber = true;
-            equalsPressed = false;
+            result = 0;
+            labelCurrentOperation.Content = "";
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
-            string currentNumber = Numbers.Last().ToString();
-
-            if (currentNumber != "0" && !equalsPressed)
+            int length = txtDisplay.Text.Length;
+            if (txtDisplay.Text != "0" && !buttonPressed)
             {
-                currentNumber = currentNumber.Remove(currentNumber.Length - 1);
-                string output = labelCurrentOperation.Content.ToString();
+                //Uppdaterar labelCurrentOperation.Content
+                ChangeLabelContent(Remove, "1");
+                txtDisplay.Text = txtDisplay.Text.Remove(length - 1);
 
-                //Måste det här vara en if? Nu går den inte in hit pga förra ifen
                 if (txtDisplay.Text == "")
                 {
-                    Numbers[current] = 0;
-                    output = output.Remove(charactersPressed - 1);
-                    labelCurrentOperation.Content = output;
-                    txtDisplay.Text = Numbers[current].ToString();
-                }
-                else
-                {
-                    if (currentNumber == "")
-                    {
-                        currentNumber = "0";
-                    }
-                    Numbers[current] = decimal.Parse(currentNumber);
-
-                    charactersPressed = output.Length;
-                    output = output.Remove(charactersPressed - 1);
-                    labelCurrentOperation.Content = output;
-                    txtDisplay.Text = Numbers[current].ToString();
+                    txtDisplay.Text = "0";
                 }
             }
         }
@@ -216,28 +241,22 @@ namespace WPFLektion
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            OperationSituation("+");
-
-            //operation = "+";
-            //labelCurrentOperation.Content = labelCurrentOperation.Content + operation;
-            //ChangeNumber(Numbers[ctr - 1]);
-            //txtDisplay.Text = result.ToString();
-            //initButtonPress = true;
+            Operation("+");
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            OperationSituation("-");
+            Operation("-");
         }
 
         private void btnTimes_Click(object sender, RoutedEventArgs e)
         {
-            OperationSituation("*");
+            Operation("*");
         }
 
         private void btnDivide_Click(object sender, RoutedEventArgs e)
         {
-            OperationSituation("/");
+            Operation("/");
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)

@@ -59,7 +59,7 @@
             <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="&lt;==" Margin="1.5"/>
 
             <!--Display Buttons-->
-        <TextBox x:Name="txtDisplay" IsReadOnly="True" TextAlignment="Right" VerticalAlignment="Bottom" FontSize="30"
+            <TextBox x:Name="txtDisplay" IsReadOnly="True" TextAlignment="Right" VerticalAlignment="Bottom" FontSize="30"
                  BorderThickness="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Background="#eee" Foreground="Black"
                  TextChanged="txtDisplay_TextChanged" Margin="1.5">0</TextBox>
         
