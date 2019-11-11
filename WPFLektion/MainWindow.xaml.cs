@@ -32,6 +32,8 @@ namespace WPFLektion
 
         string operation = "";
         decimal result = 0;
+        decimal lastResult = 0;
+        bool buttonPressed = false;
 
         //Vill jag parsea det som står i labelBox så fort jag trycker på en operation eller lika med
         //Varje knapptryckning lägger till i textbox och label.
@@ -46,29 +48,37 @@ namespace WPFLektion
 
         private void btnClearEntry_Click(object sender, RoutedEventArgs e)
         {
-
+            txtDisplay.Text = "0";
         }
 
-        public void CreateNumber()
-        {
+        //public void CreateNumber()
+        //{
 
-        }
+        //}
 
-        public void MakeCalculation(decimal aNumber)
+        public void MakeCalculation()
         {
+            decimal number = decimal.Parse(txtDisplay.Text);
+
             switch (operation)
             {
                 case "+":
-                    result += aNumber;
+                    result += number;
                     break;
                 case "-":
-                    result -= aNumber;
+                    result -= number;
                     break;
                 case "*":
-                    result *= aNumber;
+                    result *= number;
                     break;
                 case "/":
-                    result /= aNumber;
+                    result /= number;
+                    break;
+                default:
+                    if (!buttonPressed)
+                    {
+                        result += number;
+                    }
                     break;
             }
         }
@@ -77,17 +87,21 @@ namespace WPFLektion
         {
             //När jag trycker på ett nummer så läggs det till i txt.Display
             //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
-            if (operation != "")
+            if (buttonPressed)
             {
-                txtDisplay.Clear();
-                operation = "";
+                if (txtDisplay.Text != "-")
+                {
+                    txtDisplay.Clear();
+                }
+                buttonPressed = false;
             }
 
             txtDisplay.Text += btnNum;
-            char[] charArray = txtDisplay.Text.ToCharArray();
 
             if (txtDisplay.Text.Length >= 2)
             {
+                char[] charArray = txtDisplay.Text.ToCharArray();
+
                 if (txtDisplay.Text.First() == '0' && charArray[1] != ',')
                 {
                     txtDisplay.Text = btnNum.ToString();
@@ -99,12 +113,10 @@ namespace WPFLektion
         {
             //Så fort jag trycker på en operation så parseas txt.display till en decimal och uppdaterar result
 
-
-
-            decimal number = decimal.Parse(txtDisplay.Text);
-            MakeCalculation(number);
+            MakeCalculation();
             operation = aOperation;
             txtDisplay.Text = result.ToString();
+            buttonPressed = true;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
@@ -118,39 +130,62 @@ namespace WPFLektion
 
         private void btnEquals_Click(object sender, RoutedEventArgs e)
         {
-
+            MakeCalculation();
+            txtDisplay.Text = result.ToString();
+            operation = "";
+            buttonPressed = true;
+            lastResult = result;
+            result = 0;
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            if (txtDisplay.Text == "0" && !txtDisplay.Text.Contains("-"))
+            if (!buttonPressed)
             {
-                txtDisplay.Text = "-";
-            }
-            else if (txtDisplay.Text.Contains("-"))
-            {
-                txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
-                if (txtDisplay.Text == "")
+                if (txtDisplay.Text == "0" && !txtDisplay.Text.Contains("-"))
                 {
-                    txtDisplay.Text = "0";
+                    txtDisplay.Text = "-";
                 }
+                else if (txtDisplay.Text.Contains("-"))
+                {
+                    txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
+                    if (txtDisplay.Text == "")
+                    {
+                        txtDisplay.Text = "0";
+                    }
+                }
+                else
+                {
+                    string saveString = txtDisplay.Text;
+                    txtDisplay.Clear();
+                    txtDisplay.Text = "-" + saveString;
+                } 
             }
             else
             {
-                string saveString = txtDisplay.Text;
                 txtDisplay.Clear();
-                txtDisplay.Text = "-" + saveString;
+                txtDisplay.Text = "-";
             }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             txtDisplay.Clear();
+            txtDisplay.Text = "0";
+            result = 0;
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
         {
-
+            int length = txtDisplay.Text.Length;
+            if (txtDisplay.Text != "0")
+            {
+                txtDisplay.Text = txtDisplay.Text.Remove(length - 1);
+                if (txtDisplay.Text == "")
+                {
+                    txtDisplay.Text = "0";
+                }
+            }
         }
 
         private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
