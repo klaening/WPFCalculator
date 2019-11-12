@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFLektion"
         mc:Ignorable="d"
-        Title="My Calculator" Height="430" Width="280">
+        Title="Mikael's Calculator" Height="430" Width="280">
     <Border Margin="10">
     <Grid Background="#eee">
         

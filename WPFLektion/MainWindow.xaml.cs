@@ -53,6 +53,7 @@ namespace WPFLektion
             {
                 ChangeLabelContent(Remove, txtDisplay.Text);               
                 txtDisplay.Text = "0";
+                buttonPressed = true;
             }
         }
 
@@ -103,41 +104,46 @@ namespace WPFLektion
         {
             //När jag trycker på ett nummer så läggs det till i txt.Display
             //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
-            if (buttonPressed)
+
+            txtDisplay.Text += btnNum;
+
+            if (txtDisplay.Text.First() == '0' && txtDisplay.Text.Substring(1, 1) != ",")
             {
-                if (txtDisplay.Text != "-")
+                txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
+            }
+            else if (txtDisplay.Text.Length > 2)
+            {
+                if (txtDisplay.Text.First() == '-' && txtDisplay.Text.Substring(1, 1) == "0" && txtDisplay.Text.Substring(2, 1) != ",")
                 {
-                    txtDisplay.Clear();
+                    txtDisplay.Text = txtDisplay.Text.Remove(1, 1);
                 }
-                buttonPressed = false;
             }
 
 
-            if (labelCurrentOperation.Content != null)
-            {
-                string content = labelCurrentOperation.Content.ToString();
 
-                if (btnNum == 0 && content.Length > 2 && content.Substring(0, 2) != "0,")
-                {
-                    labelCurrentOperation.Content = "0";
-                }
-                else
-                {
-                    txtDisplay.Text += btnNum;
-                }
-            }
 
-            if (txtDisplay.Text.Length >= 2)
-            {
-                char[] charArray = txtDisplay.Text.ToCharArray();
 
-                if (txtDisplay.Text.First() == '0' && charArray[1] != ',')
-                {
-                    txtDisplay.Text = btnNum.ToString();
-                }
-            }
 
-            ChangeLabelContent(Add, btnNum.ToString());
+            //else if (decimal.Parse(txtDisplay.Text) == 0 && !txtDisplay.Text.Contains(','))
+            //{
+            //    ChangeLabelContent(Remove, txtDisplay.Text);
+            //    txtDisplay.Text = txtDisplay.Text.Remove(txtDisplay.Text.Length - 1);
+            //    ChangeLabelContent(Add, txtDisplay.Text);
+            //}
+
+            //if (labelCurrentOperation.Content == null || labelCurrentOperation.Content == "")
+            //{
+            //    txtDisplay.Text += btnNum;
+            //}
+            //else
+            //{
+            //    ChangeLabelContent(Remove, txtDisplay.Text);
+            //    txtDisplay.Text += btnNum;
+            //    ChangeLabelContent(Add, txtDisplay.Text);
+            //}
+
+            //ChangeLabelContent kanske ska ta bort det som txtDisplay innehåller och sen lägga till den uppdaterade.
+            //Om värdet av txtdisplay är 0 & 0 inte innehåller ett komma tas en karaktär bort.
         }
 
         private void Operation(string aOperation)
@@ -232,6 +238,7 @@ namespace WPFLektion
             txtDisplay.Text = "0";
             result = 0;
             labelCurrentOperation.Content = "";
+            buttonPressed = true;
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
@@ -245,6 +252,7 @@ namespace WPFLektion
 
                 if (txtDisplay.Text == "")
                 {
+                    buttonPressed = true;
                     txtDisplay.Text = "0";
                 }
             }
