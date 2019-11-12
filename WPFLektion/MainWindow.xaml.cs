@@ -177,6 +177,9 @@ namespace WPFLektion
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
+            //Kan man simplifiera det här med att sätta buttonPressed till true som default?
+
+
             if (buttonPressed || txtDisplay.Text == "0")
             {
                 txtDisplay.Clear();
