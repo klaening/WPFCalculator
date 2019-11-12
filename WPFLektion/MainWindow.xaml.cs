@@ -31,7 +31,7 @@ namespace WPFLektion
         //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
         string operation = "";
         decimal result = 0;
-        bool buttonPressed = false;
+        bool buttonPressed = true;
 
         string Add = "Add";
         string Remove = "Remove";
@@ -112,7 +112,20 @@ namespace WPFLektion
                 buttonPressed = false;
             }
 
-            txtDisplay.Text += btnNum;
+
+            if (labelCurrentOperation.Content != null)
+            {
+                string content = labelCurrentOperation.Content.ToString();
+
+                if (btnNum == 0 && content.Length > 2 && content.Substring(0, 2) != "0,")
+                {
+                    labelCurrentOperation.Content = "0";
+                }
+                else
+                {
+                    txtDisplay.Text += btnNum;
+                }
+            }
 
             if (txtDisplay.Text.Length >= 2)
             {

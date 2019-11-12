@@ -56,7 +56,7 @@
         <!--Clear Buttons-->
         <Button x:Name="btnClearEntry" Grid.Row="2" Grid.Column="0" Click="btnClearEntry_Click" Margin="1.5">CE</Button>
         <Button x:Name="btnClear" Grid.Row="2" Grid.Column="1" Click="btnClear_Click" Margin="1.5">C</Button>
-            <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="&lt;==" Margin="1.5"/>
+            <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="⌫" Margin="1.5"/>
 
             <!--Display Buttons-->
             <TextBox x:Name="txtDisplay" IsReadOnly="True" TextAlignment="Right" VerticalAlignment="Bottom" FontSize="30"
