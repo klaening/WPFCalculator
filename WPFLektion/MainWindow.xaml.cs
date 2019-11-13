@@ -30,8 +30,11 @@ namespace WPFLektion
         //result uppdateras med det nya numret och result skrivs ut på txt.Display
         //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
         string operation = "";
+        string alternativeOperation = "";
         decimal result = 0;
+        decimal currentNumber = 1;
         bool buttonPressed = false;
+        bool initAltOp = false;
 
         string Add = "Add";
         string Remove = "Remove";
@@ -76,6 +79,11 @@ namespace WPFLektion
         {
             decimal number = decimal.Parse(txtDisplay.Text);
 
+            if (alternativeOperation != "")
+            {
+                number = MakePowCalculation(number);
+            }
+
             switch (operation)
             {
                 case "+":
@@ -90,6 +98,10 @@ namespace WPFLektion
                 case "/":
                     result /= number;
                     break;
+                case "^":
+                    MakePowCalculation(number);
+                    break;
+
                 default:
                     if (!buttonPressed)
                     {
@@ -116,28 +128,46 @@ namespace WPFLektion
 
             if (txtDisplay.Text.Length >= 2)
             {
-                char[] charArray = txtDisplay.Text.ToCharArray();
-
-                if (txtDisplay.Text.First() == '0' && charArray[1] != ',')
+                if (txtDisplay.Text.First() == '0' && txtDisplay.Text.Substring(1, 1) != ",")
                 {
                     txtDisplay.Text = btnNum.ToString();
                 }
             }
-
             ChangeLabelContent(Add, btnNum.ToString());
         }
 
         private void Operation(string aOperation)
         {
             //Så fort jag trycker på en operation så parseas txt.display till en decimal och uppdaterar result
-            MakeCalculation();
-            operation = aOperation;
-            txtDisplay.Text = result.ToString();
+
             if (!buttonPressed)
             {
-                ChangeLabelContent(Add, operation);
+                if (aOperation != "^")
+                {
+                    MakeCalculation();
+                    operation = aOperation;
+                    ChangeLabelContent(Add, operation);
+                }
+                else
+                {
+                    alternativeOperation = aOperation;
+                    ChangeLabelContent(Add, aOperation);
+                }
             }
+            txtDisplay.Text = result.ToString();
             buttonPressed = true;
+        }
+
+        private decimal MakePowCalculation(decimal aNumber)
+        {
+            decimal currentResult = 1;
+            for (int i = 0; i < aNumber; i++)
+            {
+                currentResult *= currentNumber;
+            }
+
+            alternativeOperation = "";
+            return currentResult;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
@@ -146,8 +176,7 @@ namespace WPFLektion
             {
                 if (txtDisplay.Text == "0")
                 {
-                    txtDisplay.Clear();
-                    txtDisplay.Text = "0,";
+                    txtDisplay.Text += ",";
                     ChangeLabelContent(Add, txtDisplay.Text);
                 }
                 else
@@ -173,6 +202,20 @@ namespace WPFLektion
             operation = "";
             buttonPressed = true;
             result = 0;
+        }
+
+        private void btnPow_Click(object sender, RoutedEventArgs e)
+        {
+            if (alternativeOperation == "")
+            {
+                currentNumber = decimal.Parse(txtDisplay.Text);
+                Operation("^");
+            }
+        }
+
+        private void btnSqrt_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
@@ -219,6 +262,8 @@ namespace WPFLektion
             txtDisplay.Text = "0";
             result = 0;
             labelCurrentOperation.Content = "";
+            operation = "";
+            alternativeOperation = "";
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
