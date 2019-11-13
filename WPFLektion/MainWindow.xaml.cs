@@ -79,9 +79,13 @@ namespace WPFLektion
         {
             decimal number = decimal.Parse(txtDisplay.Text);
 
-            if (alternativeOperation != "")
+            if (alternativeOperation == "^")
             {
                 number = MakePowCalculation(number);
+            }
+            else if (alternativeOperation == "√")
+            {
+                number = (decimal)MakeSqrtCalculation(number);
             }
 
             switch (operation)
@@ -98,15 +102,12 @@ namespace WPFLektion
                 case "/":
                     result /= number;
                     break;
-                case "^":
-                    MakePowCalculation(number);
-                    break;
 
                 default:
-                    if (!buttonPressed)
-                    {
+                    //if (!buttonPressed)
+                    //{
                         result += number;
-                    }
+                    //}
                     break;
             }
         }
@@ -142,19 +143,36 @@ namespace WPFLektion
 
             if (!buttonPressed)
             {
-                if (aOperation != "^")
+                if (aOperation == "^")
+                {
+                    currentNumber = decimal.Parse(txtDisplay.Text);
+                    alternativeOperation = aOperation;
+                    ChangeLabelContent(Add, aOperation);
+                }
+                else if (aOperation == "√")
+                {
+                    currentNumber = decimal.Parse(txtDisplay.Text);
+                    alternativeOperation = aOperation;
+                    
+                    string content = labelCurrentOperation.Content.ToString();
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        labelCurrentOperation.Content = content.Remove(content.Length - txtDisplay.Text.Length);
+                        ChangeLabelContent(Add, "√" + txtDisplay.Text);
+                    }
+                    else
+                    {
+                        ChangeLabelContent(Add, "√");
+                    }
+                }
+                else
                 {
                     MakeCalculation();
                     operation = aOperation;
                     ChangeLabelContent(Add, operation);
-                }
-                else
-                {
-                    alternativeOperation = aOperation;
-                    ChangeLabelContent(Add, aOperation);
+                    txtDisplay.Text = result.ToString();
                 }
             }
-            txtDisplay.Text = result.ToString();
             buttonPressed = true;
         }
 
@@ -166,6 +184,15 @@ namespace WPFLektion
                 currentResult *= currentNumber;
             }
 
+            alternativeOperation = "";
+            return currentResult;
+        }
+
+        private double MakeSqrtCalculation(decimal number)
+        {
+            double num = (double)currentNumber;
+            double currentResult = Math.Sqrt(num);
+            
             alternativeOperation = "";
             return currentResult;
         }
@@ -208,21 +235,20 @@ namespace WPFLektion
         {
             if (alternativeOperation == "")
             {
-                currentNumber = decimal.Parse(txtDisplay.Text);
                 Operation("^");
             }
         }
 
         private void btnSqrt_Click(object sender, RoutedEventArgs e)
         {
-
+            if (alternativeOperation == "")
+            {
+                Operation("√");
+            }
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
         {
-            //Kan man simplifiera det här med att sätta buttonPressed till true som default?
-
-
             if (buttonPressed || txtDisplay.Text == "0")
             {
                 txtDisplay.Clear();
