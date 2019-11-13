@@ -32,6 +32,7 @@ namespace WPFLektion
         string operation = "";
         decimal result = 0;
         bool buttonPressed = true;
+        bool firstIsZero = false;
 
         string Add = "Add";
         string Remove = "Remove";
@@ -105,19 +106,54 @@ namespace WPFLektion
             //När jag trycker på ett nummer så läggs det till i txt.Display
             //Om txt.Displays första siffra är 0 så tas nollan bort och ersätts med nästa siffra
 
-            txtDisplay.Text += btnNum;
+            if (buttonPressed && btnNum != 0)
+            {
+                txtDisplay.Text = btnNum.ToString();
+                buttonPressed = false;
+                firstIsZero = false;
+            }
+            else if (btnNum != 0)
+            {
+                txtDisplay.Text += btnNum;
+                firstIsZero = false;
+            }
+            else if (txtDisplay.Text.Substring(0, 1) != "0")
+            {
+                txtDisplay.Text += btnNum;
+                firstIsZero = true;
+            }
 
-            if (txtDisplay.Text.First() == '0' && txtDisplay.Text.Substring(1, 1) != ",")
-            {
-                txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
-            }
-            else if (txtDisplay.Text.Length > 2)
-            {
-                if (txtDisplay.Text.First() == '-' && txtDisplay.Text.Substring(1, 1) == "0" && txtDisplay.Text.Substring(2, 1) != ",")
-                {
-                    txtDisplay.Text = txtDisplay.Text.Remove(1, 1);
-                }
-            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //txtDisplay.Text += btnNum;
+
+            //if (txtDisplay.Text.First() == '0' && txtDisplay.Text.Substring(1, 1) != ",")
+            //{
+            //    txtDisplay.Text = txtDisplay.Text.Remove(0, 1);
+            //}
+            //else if (txtDisplay.Text.Length > 2)
+            //{
+            //    if (txtDisplay.Text.First() == '-' && txtDisplay.Text.Substring(1, 1) == "0" && txtDisplay.Text.Substring(2, 1) != ",")
+            //    {
+            //        txtDisplay.Text = txtDisplay.Text.Remove(1, 1);
+            //    }
+            //}
 
 
 
