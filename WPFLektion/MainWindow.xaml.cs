@@ -34,7 +34,6 @@ namespace WPFLektion
         decimal result = 0;
         decimal currentNumber = 1;
         bool buttonPressed = false;
-        bool initAltOp = false;
 
         string Add = "Add";
         string Remove = "Remove";
@@ -64,13 +63,12 @@ namespace WPFLektion
             switch (addOrRemove)
             {
                 case "Add":
-                    labelCurrentOperation.Content += input;
+                    labelCurrentOperation.Text += input;
                     break;
                 case "Remove":
-                    string content = labelCurrentOperation.Content.ToString();
-                    int contentLength = content.Length;
-                    content = content.Remove(contentLength - input.Length);
-                    labelCurrentOperation.Content = content;
+                    string content = labelCurrentOperation.Text;
+                    int contentLength = labelCurrentOperation.Text.Length;
+                    labelCurrentOperation.Text = content.Remove(contentLength - input.Length);
                     break;
             }
         }
@@ -154,10 +152,11 @@ namespace WPFLektion
                     currentNumber = decimal.Parse(txtDisplay.Text);
                     alternativeOperation = aOperation;
                     
-                    string content = labelCurrentOperation.Content.ToString();
-                    if (!string.IsNullOrWhiteSpace(content))
+                    if (!string.IsNullOrWhiteSpace(labelCurrentOperation.Text))
                     {
-                        labelCurrentOperation.Content = content.Remove(content.Length - txtDisplay.Text.Length);
+                        string content = labelCurrentOperation.Text;
+
+                        labelCurrentOperation.Text = content.Remove(content.Length - txtDisplay.Text.Length);
                         ChangeLabelContent(Add, "√" + txtDisplay.Text);
                     }
                     else
@@ -225,7 +224,7 @@ namespace WPFLektion
         {
             MakeCalculation();
             txtDisplay.Text = result.ToString();
-            labelCurrentOperation.Content = "";
+            labelCurrentOperation.Text = "";
             operation = "";
             buttonPressed = true;
             result = 0;
@@ -287,7 +286,7 @@ namespace WPFLektion
             txtDisplay.Clear();
             txtDisplay.Text = "0";
             result = 0;
-            labelCurrentOperation.Content = "";
+            labelCurrentOperation.Text = "";
             operation = "";
             alternativeOperation = "";
         }
@@ -372,6 +371,11 @@ namespace WPFLektion
         private void btn0_Click(object sender, RoutedEventArgs e)
         {
             NumAppend(0);
+        }
+
+        private void labelCurrentOperation_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
