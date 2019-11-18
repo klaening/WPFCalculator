@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFLektion"
         mc:Ignorable="d"
         Title="My Calculator" Height="430" Width="280">
-    <Border Margin="10">
+    <Border Margin="1" BorderBrush="DarkGray" BorderThickness="10">
     <Grid Background="#eee">
         
         <Grid.ColumnDefinitions>
@@ -51,16 +51,16 @@
             <Button x:Name="btnEquals" Grid.Row="6" Grid.Column="3" Grid.RowSpan="2" Click="btnEquals_Click" Background="AntiqueWhite" Margin="1">=</Button>
         <!--<Button x:Name="btnMemMinus" Grid.Row="3" Grid.Column="0" Click="btnMemMinus" Margin="1.5">m-</Button>-->
         <!--<Button x:Name="btnMemPlus" Grid.Row="3" Grid.Column="1" Click="btnMemPlus" Margin="1.5">m+</Button>-->
-        <Button x:Name="btnPow" Grid.Row="3" Grid.Column="1" Click="btnPow_Click" Margin="1">x^</Button>
-        <Button x:Name="btnSqrt" Grid.Row="3" Grid.Column="2" Click="btnSqrt_Click" Margin="1">√</Button>
-        <Button x:Name="btnEmpty" Grid.Row="3" Grid.Column="0" Margin="1"></Button>
+        <Button x:Name="btnPow" Grid.Row="2" Grid.Column="1" Click="btnPow_Click" Margin="1">x^</Button>
+        <Button x:Name="btnSqrt" Grid.Row="2" Grid.Column="2" Click="btnSqrt_Click" Margin="1">√</Button>
+        <Button x:Name="btnEmpty" Grid.Row="2" Grid.Column="0" Click="btnPercent_Click" Margin="1">%</Button>
         <!--Positive Negative-->
         <Button x:Name="btnPositiveNegative" Grid.Row="7" Grid.Column="0" Click="btnPositiveNegative_Click" Margin="1">+-</Button>
  
         <!--Clear Buttons-->
-            <Button x:Name="btnClear" Grid.Row="2" Grid.Column="0" Click="btnClear_Click" Background="AntiqueWhite" Margin="1">C</Button>
-            <Button x:Name="btnClearEntry" Grid.Row="2" Grid.Column="1" Click="btnClearEntry_Click" Margin="1">CE</Button>
-        <Button x:Name="btnBackSpace" Grid.Row="2" Grid.Column="2" Click="btnBackSpace_Click" Content="⌫" Margin="1"/>
+            <Button x:Name="btnClear" Grid.Row="3" Grid.Column="0" Click="btnClear_Click" Background="AntiqueWhite" Margin="1">C</Button>
+            <Button x:Name="btnClearEntry" Grid.Row="3" Grid.Column="1" Click="btnClearEntry_Click" Margin="1">CE</Button>
+        <Button x:Name="btnBackSpace" Grid.Row="3" Grid.Column="2" Click="btnBackSpace_Click" Content="⌫" Margin="1"/>
 
             <!--Display Buttons-->
         <TextBox x:Name="txtDisplay" IsReadOnly="True" TextAlignment="Right" VerticalAlignment="Bottom" FontSize="30"

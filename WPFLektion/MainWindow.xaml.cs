@@ -30,9 +30,10 @@ namespace WPFLektion
         //result uppdateras med det nya numret och result skrivs ut på txt.Display
         //När man trycker på likamed så parseas txt.Display och resultatet skrivs ut
         string operation = "";
-        string alternativeOperation = "";
+        string precedingOperation = "";
         decimal result = 0;
-        decimal currentNumber = 1;
+        decimal currentNumber;
+        decimal lastNumber;
         bool buttonPressed = false;
 
         string Add = "Add";
@@ -77,14 +78,23 @@ namespace WPFLektion
         {
             decimal number = decimal.Parse(txtDisplay.Text);
 
-            if (alternativeOperation == "^")
+            if (precedingOperation != "")
             {
-                number = MakePowCalculation(number);
+                number = MakePrecedingCalculation(number);
             }
-            else if (alternativeOperation == "√")
-            {
-                number = (decimal)MakeSqrtCalculation(number);
-            }
+
+            //if (alternativeOperation == "^")
+            //{
+            //    number = MakePowCalculation(number);
+            //}
+            //else if (alternativeOperation == "√")
+            //{
+            //    number = (decimal)MakeSqrtCalculation(number);
+            //}
+            //else if (alternativeOperation == "%")
+            //{
+            //    number = MakePercentCalculation(number);
+            //}
 
             switch (operation)
             {
@@ -102,12 +112,10 @@ namespace WPFLektion
                     break;
 
                 default:
-                    //if (!buttonPressed)
-                    //{
-                        result += number;
-                    //}
+                    result += number;
                     break;
             }
+            lastNumber = number;
         }
 
         public void NumAppend(int btnNum)
@@ -141,16 +149,15 @@ namespace WPFLektion
 
             if (!buttonPressed)
             {
-                if (aOperation == "^")
+                if (aOperation == "^" || aOperation == "%")
                 {
                     currentNumber = decimal.Parse(txtDisplay.Text);
-                    alternativeOperation = aOperation;
+                    precedingOperation = aOperation;
                     ChangeLabelContent(Add, aOperation);
                 }
                 else if (aOperation == "√")
                 {
-                    currentNumber = decimal.Parse(txtDisplay.Text);
-                    alternativeOperation = aOperation;
+                    precedingOperation = aOperation;
                     
                     if (!string.IsNullOrWhiteSpace(labelCurrentOperation.Text))
                     {
@@ -175,25 +182,31 @@ namespace WPFLektion
             buttonPressed = true;
         }
 
-        private decimal MakePowCalculation(decimal aNumber)
+        private decimal MakePrecedingCalculation(decimal aNumber)
         {
-            decimal currentResult = 1;
-            for (int i = 0; i < aNumber; i++)
+            decimal currentResult;
+            switch (precedingOperation)
             {
-                currentResult *= currentNumber;
+                case "^":
+                    currentResult = 1;
+                    for (int i = 0; i < aNumber; i++)
+                    {
+                        currentResult *= currentNumber;
+                    }
+                    aNumber = currentResult;
+                    break;
+
+                case "√":
+                    double num = double.Parse(txtDisplay.Text);
+                    aNumber = (decimal)Math.Sqrt(num);
+                    break;
+
+                case "%":
+                    aNumber = aNumber * lastNumber / 100;
+                    break;
             }
-
-            alternativeOperation = "";
-            return currentResult;
-        }
-
-        private double MakeSqrtCalculation(decimal number)
-        {
-            double num = (double)currentNumber;
-            double currentResult = Math.Sqrt(num);
-            
-            alternativeOperation = "";
-            return currentResult;
+            precedingOperation = "";
+            return aNumber;
         }
 
         private void btnDecimal_Click(object sender, RoutedEventArgs e)
@@ -228,22 +241,6 @@ namespace WPFLektion
             operation = "";
             buttonPressed = true;
             result = 0;
-        }
-
-        private void btnPow_Click(object sender, RoutedEventArgs e)
-        {
-            if (alternativeOperation == "")
-            {
-                Operation("^");
-            }
-        }
-
-        private void btnSqrt_Click(object sender, RoutedEventArgs e)
-        {
-            if (alternativeOperation == "")
-            {
-                Operation("√");
-            }
         }
 
         private void btnPositiveNegative_Click(object sender, RoutedEventArgs e)
@@ -288,7 +285,8 @@ namespace WPFLektion
             result = 0;
             labelCurrentOperation.Text = "";
             operation = "";
-            alternativeOperation = "";
+            precedingOperation = "";
+            buttonPressed = false;
         }
 
         private void btnBackSpace_Click(object sender, RoutedEventArgs e)
@@ -330,6 +328,30 @@ namespace WPFLektion
         private void btnDivide_Click(object sender, RoutedEventArgs e)
         {
             Operation("/");
+        }
+
+        private void btnPow_Click(object sender, RoutedEventArgs e)
+        {
+            if (precedingOperation == "")
+            {
+                Operation("^");
+            }
+        }
+
+        private void btnSqrt_Click(object sender, RoutedEventArgs e)
+        {
+            if (precedingOperation == "")
+            {
+                Operation("√");
+            }
+        }
+
+        private void btnPercent_Click(object sender, RoutedEventArgs e)
+        {
+            if (precedingOperation == "")
+            {
+                Operation("%");
+            }
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
@@ -377,5 +399,32 @@ namespace WPFLektion
         {
 
         }
+
+        //private decimal MakePowCalculation(decimal aNumber)
+        //{
+        //    decimal currentResult = 1;
+        //    for (int i = 0; i < aNumber; i++)
+        //    {
+        //        currentResult *= currentNumber;
+        //    }
+
+        //    alternativeOperation = "";
+        //    return currentResult;
+        //}
+
+        //private decimal MakeSqrtCalculation(decimal number)
+        //{
+        //    double num = (double)currentNumber;
+        //    double currentResult = Math.Sqrt(num);
+
+        //    alternativeOperation = "";
+        //    return (decimal)currentResult;
+        //}
+
+        //private decimal MakePercentCalculation(decimal number)
+        //{
+        //    return number * lastNumber / 100;
+        //}
+
     }
 }
