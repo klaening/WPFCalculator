@@ -305,11 +305,6 @@ namespace WPFLektion
             }
         }
 
-        private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
             Operation("+");
@@ -396,6 +391,10 @@ namespace WPFLektion
         }
 
         private void labelCurrentOperation_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
