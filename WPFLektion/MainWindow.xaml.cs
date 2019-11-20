@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Media;
+using System.IO;
 
 namespace WPFLektion
 {
@@ -402,7 +404,12 @@ namespace WPFLektion
 
         private void btnHonk_Click(object sender, RoutedEventArgs e)
         {
-
+            using (FileStream stream = File.Open(@"ahooga.wav", FileMode.Open))
+            {
+                SoundPlayer myNewSound = new SoundPlayer(stream);
+                myNewSound.Load();
+                myNewSound.Play();
+            }
         }
 
         //private decimal MakePowCalculation(decimal aNumber)
