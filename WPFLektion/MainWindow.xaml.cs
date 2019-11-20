@@ -127,8 +127,8 @@ namespace WPFLektion
                 if (txtDisplay.Text != "-")
                 {
                     txtDisplay.Clear();
+                    buttonPressed = false;
                 }
-                buttonPressed = false;
             }
 
             txtDisplay.Text += btnNum;
@@ -140,6 +140,7 @@ namespace WPFLektion
                     txtDisplay.Text = btnNum.ToString();
                 }
             }
+
             ChangeLabelContent(Add, btnNum.ToString());
         }
 
@@ -395,6 +396,11 @@ namespace WPFLektion
 
         }
         private void txtDisplay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void btnHonk_Click(object sender, RoutedEventArgs e)
         {
 
         }
